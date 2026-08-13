@@ -1,0 +1,593 @@
+import type { Catalogue } from './en';
+
+/**
+ * Sinhala.
+ *
+ * Strings the design specified verbatim (the "Orders in Sinhala" screen) are
+ * marked · design ·. The rest were translated to fill out the catalogue and
+ * should get a native-speaker pass before release.
+ */
+export const si: Catalogue = {
+  // ── Navigation ────────────────────────────────────────────────────────────
+  'nav.home': 'මුල් පිටුව', // · design ·
+  'nav.orders': 'ඇණවුම්', // · design ·
+  'nav.add': 'එකතු කරන්න',
+  'nav.products': 'භාණ්ඩ', // · design ·
+  'nav.more': 'තව', // · design ·
+
+  // ── Shared ────────────────────────────────────────────────────────────────
+  'common.rs': 'Rs',
+  'common.today': 'අද', // · design ·
+  'common.yesterday': 'ඊයේ',
+  'common.earlier': 'මීට පෙර',
+  'common.seeAll': 'සියල්ල බලන්න',
+  'common.undo': 'පෙරසේ',
+  'common.select': 'තෝරන්න',
+  'common.change': 'වෙනස් කරන්න',
+  'common.add': 'එකතු කරන්න',
+  'common.edit': 'සංස්කරණය',
+  'common.manage': 'කළමනාකරණය',
+  'common.gotIt': 'තේරුණා',
+  'common.items': 'අයිතම',
+  'common.item': 'අයිතමය',
+
+  // ── Risk ramp ─────────────────────────────────────────────────────────────
+  'risk.excellent': 'ඉතා හොඳයි', // · design ·
+  'risk.good': 'හොඳයි',
+  'risk.average': 'සාමාන්‍ය', // · design ·
+  'risk.risky': 'අවදානම්', // · design ·
+  'risk.high': 'ඉහළ අවදානම්',
+
+  // ── Order status + payment ────────────────────────────────────────────────
+  'status.pending': 'නොවිසඳූ', // · design ·
+  'status.packing': 'ඇසිරීම', // · design ·
+  'status.shipped': 'යවා ඇත', // · design ·
+  'status.delivered': 'භාර දී ඇත',
+  'status.all': 'සියල්ල',
+  'pay.cod': 'භාරදීමේදී මුදල්', // · design ·
+  'pay.paidCard': 'ගෙවා ඇත · කාඩ්',
+  'pay.paid': 'ගෙවා ඇත', // · design ·
+
+  // ── Home ──────────────────────────────────────────────────────────────────
+  'home.revenueToday': 'අද ආදායම',
+  'home.cashToCollect': 'එකතු කළ යුතු මුදල්',
+  'home.codOrdersOut': 'COD ඇණවුම් {count}ක් පිටත',
+  'home.afterCourier': 'කූරියර් ගාස්තු පසු',
+  'home.inFees': 'ගාස්තු Rs {amount}',
+  'home.checkBeforeShipping': 'යැවීමට පෙර පරීක්ෂා කරන්න',
+  'home.latestOrders': 'නවතම ඇණවුම්',
+  'home.refusedOfLast': 'COD · අවසන් ඇණවුම් {total}න් {refused}ක් ප්‍රතික්ෂේප විය',
+  'home.firstOrderHighValue': 'COD · පළමු ඇණවුම, ඉහළ වටිනාකම',
+  'home.refusalsIn': 'COD · ඇණවුම් {total}න් {refused}ක් ප්‍රතික්ෂේප විය',
+
+  // ── Orders list ───────────────────────────────────────────────────────────
+  'orders.title': 'ඇණවුම්', // · design ·
+  'orders.todayDate': 'අද · අගෝස්තු 9', // · design ·
+  'orders.empty.title': 'තවම ඇණවුම් නැත',
+  'orders.empty.body':
+    'Messenger හෝ WhatsApp පිළිතුරකින් ඔබේ ඇණවුම් සබැඳිය යවන්න, නැතහොත් පළමු ඇණවුම ඔබම ටයිප් කරන්න.',
+  'orders.empty.copyLink': 'මගේ ඇණවුම් සබැඳිය යවන්න',
+  'orders.empty.manual': 'ඇණවුමක් අතින් ටයිප් කරන්න',
+  'orders.noneIn': '{status} තුළ කිසිවක් නැත',
+  'orders.noneInBody': 'ඔබ වැඩ කරන විට ඇණවුම් මෙහි එයි. වෙනත් පෙරහනක් උත්සාහ කරන්න.',
+  'orders.showAll': 'සියලු ඇණවුම් පෙන්වන්න',
+
+  // ── Order detail ──────────────────────────────────────────────────────────
+  'order.placedVia': '{when} තැබුවා · {channel}',
+  'order.riskyForCod': 'භාරදීමේදී මුදල් සඳහා අවදානම්',
+  'order.riskyBody':
+    '{name} අවසන් COD පාර්සල් {total}න් {refused}ක් ප්‍රතික්ෂේප කර ඇත. නැවත එවීමට ඔබට Rs {fee}ක් පමණ වැය වේ.',
+  'order.whyRating': 'මෙම ශ්‍රේණිගත කිරීම ඇයි?',
+  'order.askAdvance': 'අත්තිකාරමක් ඉල්ලන්න',
+  'order.advanceMessage':
+    'ආයුබෝවන් {name}, ඇණවුම {id} සඳහා ස්තූතියි. එය Rs {total}ක් වේ. යැවීමට පෙර කුඩා අත්තිකාරමක් එවන්න පුළුවන්ද?',
+  'order.whatsapp': 'WhatsApp',
+  'order.call': 'අමතන්න',
+  'order.profile': 'පැතිකඩ',
+  'order.deliverTo': 'භාර දිය යුත්තේ',
+  'order.subtotal': 'උප එකතුව',
+  'order.delivery': 'භාරදීම',
+  'order.collectOnDelivery': 'භාරදීමේදී එකතු කරන්න',
+  'order.timeline': 'කාලරේඛාව',
+  'order.placedViaChannel': '{channel} සබැඳියෙන් ඇණවුම ලැබිණි',
+  'order.confirmAndPack': 'තහවුරු කර ඇසිරීම අරඹන්න',
+  'order.qty': 'ප්‍රමාණය {qty} · Rs {price}',
+  'order.step.packed': 'තහවුරු කර ඇසුරුම් කළා',
+  'order.step.dispatched': '{courier} වෙත භාර දුන්නා',
+  'order.step.dispatchedPlain': 'කූරියර් සේවයට භාර දුන්නා',
+  'order.step.delivered': 'භාර දී ඇත',
+  'order.step.collected': 'භාර දී ඇත · මුදල් එකතු කළා',
+  'order.waitingOnYou': 'ඔබ මත රඳා පවතී — තහවුරු කර ඇසිරීම අරඹන්න',
+  'order.waitingCourier': 'කූරියර් රැගෙන යාම එනතුරු',
+  'order.withCourier': 'භාරදීමට ගොස් ඇත',
+  'order.viewLabel': 'නැව්ගත කිරීමේ ලේබලය බලන්න',
+  'order.moreOptions': 'තවත් විකල්ප',
+  'order.cancelled': 'ඇණවුම අවලංගු කළා',
+  'order.cancelledSub': 'තොගය නැවත ඔබේ රාක්කයේ',
+
+  // ── Rating explanation sheet ──────────────────────────────────────────────
+  'rating.title': 'COD විශ්වසනීයත්වය',
+  'rating.basedOn':
+    '{name}ගේ **ඔබේ** සාප්පුව සමඟ ඇති ඉතිහාසය මත පමණි. ව්‍යාපාර අතර කිසිවක් බෙදා නොගැනේ.',
+  'rating.refused': 'COD පාර්සල් {count}ක් දොරකඩදී ප්‍රතික්ෂේප විය',
+  'rating.accepted': 'COD පාර්සල් {count}ක් බාරගෙන ගෙවා ඇත',
+  'rating.thinHistory': 'ඇණවුම් {count}ක් පමණි — කෙටි ඉතිහාසය ඔවුන්ට එරෙහිව ගණන් ගැනේ',
+  'rating.suggestTitle': 'අපගේ යෝජනාව',
+  'rating.suggestBody':
+    'යැවීමට පෙර WhatsApp හරහා Rs 1,000ක අත්තිකාරමක් ඉල්ලන්න. පිරිසිදු භාරදීම් දෙකකින් ඔවුන් නැවත සාමාන්‍ය තත්ත්වයට පැමිණේ.',
+  'rating.disagree': 'එකඟ නොවේද?',
+  'rating.setManually': 'ශ්‍රේණිගත කිරීම අතින් සකසන්න',
+  'rating.overrideSticks': 'ඔබ ඉවත් කරන තුරු ඔබේ වෙනස්කම පවතී',
+
+  // ── Courier ───────────────────────────────────────────────────────────────
+  'courier.title': 'කූරියර් වෙන් කරන්න',
+  'courier.choose': 'කූරියර් තෝරන්න',
+  'courier.nextDay': 'ලබන දිනයේ · පස්වරු 4ට පෙර රැගෙන යාම',
+  'courier.delivered': '{pct}% භාර දී ඇත',
+  'courier.avgDays': 'සාමාන්‍යයෙන් දින {days}',
+  'courier.yourParcels': 'ඔබේ පාර්සල් {count}',
+  'courier.twoDays': 'දින 2 · {pct}% භාර දී ඇත',
+  'courier.selfDesc': 'ලුහුබැඳීමක් නැත, මුදල් සෘජුවම',
+  'courier.pickup': 'රැගෙන යාම',
+  'courier.pickupValue': 'අද, පස්වරු 4ට පෙර',
+  'courier.weight': 'බර',
+  'courier.weightValue': 'කිලෝ 1 දක්වා',
+  'courier.collectFrom': 'පාරිභෝගිකයාගෙන් එකතු කරන්න',
+  'courier.riskNote':
+    'අවදානම් COD පාරිභෝගිකයෙක්. ඔවුන් ප්‍රතික්ෂේප කළහොත්, {courier} නැවත එවීම සඳහා Rs {fee}ක් අය කරයි.',
+  'courier.fee': 'කූරියර් ගාස්තුව',
+  'courier.book': 'රැගෙන යාම වෙන් කර ලේබලය මුද්‍රණය කරන්න',
+  'courier.noTracking': 'ලුහුබැඳීමේ අංකයක් නැත — මෙය ඔබම භාර දෙනවා',
+
+  // ── Waybill ───────────────────────────────────────────────────────────────
+  'waybill.title': 'නැව්ගත කිරීමේ ලේබලය',
+  'waybill.booked': 'රැගෙන යාම වෙන් කර ඇත · පස්වරු 2–4ට රියදුරු පැමිණේ',
+  'waybill.bookedWith': '{courier} සමඟ වෙන් කර ඇත',
+  'waybill.hub': '{city} මධ්‍යස්ථානය · COD පාර්සලය',
+  'waybill.collect': 'එකතු කරන්න',
+  'waybill.to': 'වෙත',
+  'waybill.from': 'වෙතින්',
+  'waybill.share': 'WhatsApp වෙත බෙදන්න',
+  'waybill.message':
+    '{shop}: ඔබේ ඇණවුම {id} {courier} සමඟ එමින් තිබේ. ලුහුබැඳීම: {tracking}. භාරදීමේදී ගෙවන්න: Rs {total}.',
+
+  // ── New order ─────────────────────────────────────────────────────────────
+  'new.title': 'නව ඇණවුම',
+  'new.step': '{current} / {total}',
+  'new.customerNumber': 'පාරිභෝගිකයාගේ අංකය',
+  'new.matched': 'ඔබේ පාරිභෝගිකයන් අතරින් හමු විය',
+  'new.matchedMeta': 'ඇණවුම් {orders} · අවසන් {date} · {city}',
+  'new.someoneNew': 'නව අයෙක්',
+  'new.continueWith': '{name} සමඟ ඉදිරියට',
+  'new.itemsFor': '{name} සඳහා අයිතම',
+  'new.searchProduct': 'භාණ්ඩයක් සොයන්න හෝ ස්කෑන් කරන්න',
+  'new.boughtBefore': 'මීට පෙර මිලදී ගත් දෑ',
+  'new.fastMovers': 'වේගයෙන් අලෙවි වන',
+  'new.noMatch': '“{query}” හා ගැළපෙන භාණ්ඩයක් නැත',
+  'new.inStock': 'Rs {price} · තොගයේ {stock}',
+  'new.deliveryPayment': 'භාරදීම සහ ගෙවීම',
+  'new.addressOnFile': 'ගොනුවේ ඇති ලිපිනය',
+  'new.noAddress': 'තවම ලිපිනයක් නැත — කූරියර් වෙන් කිරීමට පෙර එකක් එකතු කරන්න',
+  'new.howWillTheyPay': 'ඔවුන් ගෙවන්නේ කෙසේද?',
+  'new.payCod': 'භාරදීමේදී මුදල්',
+  'new.payBank': 'බැංකු / කාඩ්',
+  'new.payAdvance': 'අත්තිකාරම්',
+  'new.riskInline':
+    '{name} COD සඳහා **{level}** — ඇණවුම් {total}න් ප්‍රතික්ෂේප {refused}ක්. ඔබට තවමත් ඉදිරියට යා හැක.',
+  'new.sendAdvanceLink': 'ඒ වෙනුවට අත්තිකාරම් ගෙවීම් සබැඳියක් යවන්න',
+  'new.itemsCount': 'අයිතම ({count})',
+  'new.discount': 'වට්ටම',
+  'new.noDiscount': 'වට්ටමක් නැත',
+  'new.theyPayRider': 'ඔවුන් රියදුරුට ගෙවයි',
+  'new.theyPayNow': 'යැවීමට පෙර ගෙවා ඇත',
+  'new.sendWhatsapp': 'WhatsApp හරහා තහවුරු කිරීම යවන්න',
+  'new.sendWhatsappSub': 'ඇණවුම් සාරාංශය + ලුහුබැඳීමේ සබැඳිය',
+  'new.create': 'ඇණවුම සාදන්න · Rs {total}',
+  'new.created': 'ඇණවුම {id} සාදන ලදී',
+  'new.createdSub': 'WhatsApp තහවුරු කිරීම යවන ලදී',
+  'new.open': 'විවෘත කරන්න',
+
+  // ── Add sheet ─────────────────────────────────────────────────────────────
+  'add.title': 'ඔබ එකතු කරන්නේ කුමක්ද?',
+  'add.order': 'ඇණවුම',
+  'add.orderSub': 'චැට් එකේ සිටියදීම ටයිප් කරන්න',
+  'add.product': 'භාණ්ඩය',
+  'add.productSub': 'ඡායාරූපය, මිල, තොගය',
+  'add.stock': 'ලැබුණු තොගය',
+  'add.stockSub': 'සැපයුම්කරුගෙන් ලැබූ බෙදාහැරීමක් සටහන් කරන්න',
+  'add.customer': 'පාරිභෝගිකයා',
+  'add.customerSub': 'ඇණවුම් කිරීමට පෙර අංකයක් සුරකින්න',
+
+  // ── Products ──────────────────────────────────────────────────────────────
+  'products.title': 'භාණ්ඩ', // · design ·
+  'products.new': 'නව',
+  'products.all': 'සියල්ල · {count}',
+  'products.low': 'අඩු · {count}',
+  'products.out': 'ඉවරයි · {count}',
+  'products.hidden': 'සැඟවූ · {count}',
+  'products.hiddenEmpty': 'කිසිවක් සඟවා නැත',
+  'products.hiddenEmptyBody':
+    'භාණ්ඩයක් මකා නොදමා ඔබේ වෙබ් අඩවියෙන් ඉවත් කිරීමට එහි පිටුවෙන් එය සඟවන්න.',
+  'products.addStock': 'තොග එකතු කරන්න',
+  'products.pickForStock': 'ලැබුණේ කුමන භාණ්ඩයද?',
+  'products.stockAdded': '{product} වෙත {count}ක් එකතු කළා',
+  'products.runOutWarning': 'මෙම වේගයෙන් සතියක් ඇතුළත භාණ්ඩ {count}ක් ඉවර වේ',
+  'products.inStock': 'තොගයේ {count}',
+  'products.left': '{count} ඉතිරියි',
+  'products.outOfStock': 'තොගයේ නැත',
+  'products.sizes': 'ප්‍රමාණ {count}',
+  'products.colours': 'වර්ණ {count}',
+
+  // ── Product detail ────────────────────────────────────────────────────────
+  'product.photo': 'භාණ්ඩයේ ඡායාරූපය',
+  'product.sellingPrice': 'විකුණුම් මිල',
+  'product.costMargin': 'පිරිවැය · ලාභය',
+  'product.stockByColour': 'වර්ණය අනුව තොගය',
+  'product.total': 'මුළු {count}',
+  'product.last30': 'පසුගිය දින 30',
+  'product.sold': 'විකුණා ඇත',
+  'product.soldValue': 'ඒකක {count} · Rs {amount}',
+  'product.runsOutIn': 'ඉවර වන්නේ',
+  'product.runsOutValue': '~දින {days}',
+  'product.shareToChat': 'චැට් වෙත බෙදන්න',
+  'product.addStock': 'තොගය එකතු කරන්න',
+  'colour.teal': 'ටීල්',
+  'colour.mustard': 'අබ',
+  'colour.indigo': 'නිල්',
+  'colour.natural': 'ස්වාභාවික',
+  'product.stockUnits': 'තොගයේ ඇති ගණන',
+  'product.hide': 'මගේ වෙබ් අඩවියෙන් සඟවන්න',
+  'product.hidden': 'ඔබේ වෙබ් අඩවියෙන් සඟවා ඇත',
+
+  // ── Analytics ─────────────────────────────────────────────────────────────
+  'analytics.title': 'විශ්ලේෂණ',
+  'analytics.thisMonth': 'මෙම මාසය',
+  'analytics.revenueMonth': 'ආදායම · {month}',
+  'analytics.avgOrder': 'සාමාන්‍ය ඇණවුම',
+  'analytics.repeatBuyers': 'නැවත මිලදී ගන්නන්',
+  'analytics.lostToCod': 'අවලංගු COD නිසා අහිමි වූ මුදල්',
+  'analytics.returns': 'ආපසු එවීම් {count}',
+  'analytics.lostBody':
+    'යැවීමට පෙර විශ්වසනීයත්වය පරීක්ෂා කිරීම ඇරඹූ දා සිට, මාස හතරක්ම ප්‍රතික්ෂේප කිරීම් අඩු විය.',
+  'analytics.bestSellers': 'වැඩියෙන්ම අලෙවි වූ',
+  'analytics.export': 'මෙම මාසය නිර්යාත කරන්න',
+  'analytics.exportSub': 'WhatsApp වෙත PDF, Excel හෝ CSV',
+  'analytics.pts': '+ලකුණු {count}',
+
+  // ── More ──────────────────────────────────────────────────────────────────
+  'more.title': 'තව', // · design ·
+  'more.planRenews': '{plan} · අලුත් වන්නේ {date}',
+  'more.customers': 'පාරිභෝගිකයන්',
+  'more.codReliability': 'COD විශ්වසනීයත්වය',
+  'more.riskyCount': 'අවදානම් {count}',
+  'more.payments': 'ගෙවීම් සහ ඉන්වොයිස්',
+  'more.couriers': 'කූරියර්',
+  'more.website': 'ඔබේ නොමිලේ වෙබ් අඩවිය',
+  'more.live': 'සජීවී',
+  'more.language': 'භාෂාව',
+  'more.darkTheme': 'අඳුරු තේමාව',
+  'more.notifications': 'දැනුම්දීම්',
+  'more.help': 'උදව් මධ්‍යස්ථානය',
+  'more.planName': 'Growth සැලසුම',
+  'more.planPrice': 'මසකට Rs {amount}',
+  'more.planBody':
+    'සෑම සැලසුමකම අසීමිත ඇණවුම්. Growth මඟින් විශ්වසනීයත්ව අනතුරු ඇඟවීම්, කාර්ය මණ්ඩල පිවිසුම් සහ කූරියර් ගාස්තු සංසන්දනය එකතු වේ.',
+  'more.comparePlans': 'සැලසුම් සසඳන්න',
+  'more.analytics': 'විශ්ලේෂණ',
+
+  // ── Notifications ─────────────────────────────────────────────────────────
+  'notif.title': 'දැනුම්දීම්',
+  'notif.markAllRead': 'සියල්ල කියවූ ලෙස සලකුණු කරන්න',
+  'notif.needsDecision': 'තීරණයක් අවශ්‍යයි',
+  'notif.earlierToday': 'අද කලින්',
+  'notif.riskyWaiting': 'අවදානම් COD ඇණවුමක් රැඳී සිටී',
+  'notif.riskyWaitingBody':
+    '{id} · නාඳුනන අංකයකට Rs {amount}. යවන්න, අත්තිකාරමක් ඉල්ලන්න, හෝ අවලංගු කරන්න.',
+  'notif.reviewOrder': 'ඇණවුම සමාලෝචනය කරන්න',
+  'notif.refused': 'පාර්සලය දොරකඩදී ප්‍රතික්ෂේප විය',
+  'notif.refusedBody': '{id} · {courier} එය ආපසු එවයි. Rs {fee} ආපසු එවීමේ ගාස්තුවක් අදාළ වේ.',
+  'notif.delivered': 'පාර්සල් {count}ක් භාර දී ඇත · Rs {amount} එකතු විය',
+  'notif.outOfStock': '{product} තොගයේ නැත',
+  'notif.weeklyReport': 'සතිපතා වාර්තාව සූදානම්',
+  'notif.hoursAgo': 'පැය {count}කට පෙර',
+  'notif.hourAgo': 'පැය {count}කට පෙර',
+  'notif.minAgo': 'මිනිත්තු {count}කට පෙර',
+
+  // ── Cancel dialog ─────────────────────────────────────────────────────────
+  'cancel.title': 'මෙම ඇණවුම අවලංගු කරන්නද?',
+  'cancel.body':
+    'තොගය නැවත ඔබේ රාක්කයට යයි, පාරිභෝගිකයාට WhatsApp පණිවිඩයක් ලැබේ. ඔබ අවලංගු කරන්නේ ඇයි?',
+  'cancel.reasonMind': 'පාරිභෝගිකයා අදහස වෙනස් කළා',
+  'cancel.reasonFulfil': 'මට එය ඉටු කළ නොහැක',
+  'cancel.reasonFake': 'ව්‍යාජ ඇණවුමක් යැයි සැක කෙරේ',
+  'cancel.note':
+    '“අදහස වෙනස් කළා” යන්නෙන් පාරිභෝගිකයාගේ COD විශ්වසනීයත්වය අඩු නොවේ. දොරකඩදී ප්‍රතික්ෂේප කිරීම් පමණක් එය අඩු කරයි.',
+  'cancel.keep': 'තබා ගන්න',
+  'cancel.confirm': 'ඇණවුම අවලංගු කරන්න',
+
+  // ── Search / bulk select ──────────────────────────────────────────────────
+  'search.orders': 'නම, අංකය හෝ ඇණවුම් අංකය සොයන්න',
+  'search.products': 'භාණ්ඩය හෝ SKU සොයන්න',
+  'search.customers': 'නම හෝ අංකය සොයන්න',
+  'search.help': 'උදව් සොයන්න',
+  'search.none': '“{query}” සමඟ ගැළපෙන කිසිවක් නැත',
+  'search.cancel': 'අවලංගු',
+  'notFound.order': 'එම ඇණවුම තවදුරටත් නොපවතී. එය අවලංගු කර හෝ ඒකාබද්ධ කර තිබිය හැක.',
+  'notFound.product': 'එම භාණ්ඩය තවදුරටත් නොපවතී. එය මකා දමා තිබිය හැක.',
+  'notFound.customer': 'එම පාරිභෝගිකයා තවදුරටත් නොපවතී.',
+  'select.count': '{count}ක් තෝරා ඇත',
+  'select.done': 'හරි',
+  'select.book': 'කූරියර් වෙන් කරන්න',
+  'select.print': 'ලේබල මුද්‍රණය',
+  'select.printed': 'ලේබල {count}ක් පෝලිමේ',
+  'select.printedSub': 'ඔබේ මුද්‍රණ යන්ත්‍රය එනතුරු',
+  'select.booked': 'පාර්සල් {count}ක් සඳහා රැගෙන යාම වෙන් කළා',
+  'select.bookedSub': 'පස්වරු 2–4ට රියදුරු පැමිණේ',
+
+  // ── Customers ─────────────────────────────────────────────────────────────
+  'customers.title': 'පාරිභෝගිකයන්',
+  'customers.count': 'පාරිභෝගිකයන් {count}',
+  'customers.sortRecent': 'නවතම',
+  'customers.sortSpend': 'වැඩිම වියදම',
+  'customers.sortRisk': 'අවදානම',
+  'customers.lastOrder': 'අවසන් {date}',
+  'customers.noOrders': 'තවම ඇණවුම් නැත',
+  'customers.add': 'පාරිභෝගිකයෙක් එකතු කරන්න',
+
+  // ── Customer profile ──────────────────────────────────────────────────────
+  'profile.spent': 'මුළු වියදම',
+  'profile.orders': 'ඇණවුම්',
+  'profile.reliability': 'COD විශ්වසනීයත්වය',
+  'profile.recentOrders': 'නවතම ඇණවුම්',
+  'profile.bought': 'මිලදී ගත් භාණ්ඩ',
+  'profile.notes': 'ඔබේ සටහන්',
+  'profile.notesEmpty': 'තවම සටහනක් නැත. ඔබ මෙහි ලියන දේ ඔබේ සාප්පුවට පමණයි.',
+  'profile.addNote': 'සටහනක් එක් කරන්න',
+  'profile.reachesYouOn': '{channel} හරහා සම්බන්ධ වේ',
+  'profile.timesBought': '{count}×',
+  'channel.whatsapp': 'WhatsApp',
+  'channel.messenger': 'Messenger',
+  'channel.instagram': 'Instagram',
+
+  // ── COD Reliability ───────────────────────────────────────────────────────
+  'cod.title': 'COD විශ්වසනීයත්වය',
+  'cod.tracked': 'නිරීක්ෂණය කරන පාරිභෝගිකයන්',
+  'cod.recorded': 'සටහන් වූ COD ඇණවුම්',
+  'cod.refusalRate': 'ප්‍රතික්ෂේප අනුපාතය',
+  'cod.atRisk': 'දැන් අවදානමේ ඇති මුදල',
+  'cod.atRiskSub':
+    'අවදානම් හෝ ඉහළ අවදානම් පාරිභෝගිකයන්ට තවම භාර දී නැති COD ඇණවුම් {count}ක් හරහා',
+  'cod.byTier': 'තලය අනුව පාරිභෝගිකයන්',
+  'cod.tapTier': 'එම පාරිභෝගිකයන් බැලීමට තලයක් තට්ටු කරන්න',
+  'cod.needsReview': 'සමාලෝචනය අවශ්‍යයි',
+  'cod.needsReviewSub': 'අවදානම් සහ ඉහළ අවදානම්, නරකම මුලින්',
+  'cod.allClear': 'දැනට කිසිවෙකු සමාලෝචනය කළ යුතු නැත — හොඳයි.',
+  'cod.howItWorks': 'ලකුණු ගණනය වන ආකාරය',
+  'cod.howBody':
+    'සෑම ලකුණක්ම එන්නේ එම පාරිභෝගිකයාගේ **ඔබේ** සාප්පුව සමඟ ඇති ඉතිහාසයෙන් පමණි. නව පාරිභෝගිකයන් සාමාන්‍ය තලයෙන් පටන් ගෙන COD පාර්සල් බාරගැනීම හෝ ප්‍රතික්ෂේප කිරීම අනුව වෙනස් වේ. ව්‍යාපාර අතර කිසිවක් බෙදා නොගැනේ.',
+  'cod.overrides': 'අතින් කළ වෙනස්කම්',
+  'cod.overrideSetOn': 'ඔබ විසින් {date} දින සකසන ලදී',
+  'cod.removeOverride': 'ඉවත් කරන්න',
+  'cod.noOverrides': 'ඔබ කිසිවෙකුගේ ලකුණු වෙනස් කර නැත.',
+  'cod.refusedOf': '{total}න් {refused}ක් ප්‍රතික්ෂේප විය',
+
+  // ── Rating override sheet ─────────────────────────────────────────────────
+  'override.title': 'ශ්‍රේණිගත කිරීම අතින් සකසන්න',
+  'override.body':
+    'ඔබ ඉවත් කරන තුරු ඔබේ තේරීම {name} සඳහා ගණනය කළ ලකුණු වෙනුවට යෙදේ. ප්‍රතික්ෂේප කිරීම් තවමත් සටහන් වේ.',
+  'override.save': 'වෙනස්කම සුරකින්න',
+  'override.remove': 'වෙනස්කම ඉවත් කරන්න',
+
+  // ── Payments & invoices ───────────────────────────────────────────────────
+  'pay.title': 'ගෙවීම් සහ ඉන්වොයිස්',
+  'pay.collected': 'මෙම මාසයේ එකතු කළ',
+  'pay.pendingCod': 'නොලැබුණු COD',
+  'pay.refunds': 'ආපසු දිය යුතු',
+  'pay.byMethod': 'ගෙවීම් ක්‍රමය අනුව',
+  'pay.transactions': 'ගනුදෙනු',
+  'pay.invoices': 'ඉන්වොයිස්',
+  'pay.method.cod': 'භාරදීමේදී මුදල්',
+  'pay.method.bank': 'බැංකු හුවමාරුව',
+  'pay.method.payhere': 'PayHere',
+  'pay.status.collected': 'එකතු විය',
+  'pay.status.pending': 'නොලැබුණු',
+  'pay.status.refunded': 'ආපසු දුන්නා',
+  'pay.invoiceIssued': '{date} නිකුත් කළා',
+  'pay.invoicePaid': 'ගෙවා ඇත',
+  'pay.invoiceUnpaid': 'නොගෙවූ',
+  'pay.share': 'බෙදන්න',
+
+  // ── Couriers ──────────────────────────────────────────────────────────────
+  'couriers.title': 'කූරියර්',
+  'couriers.connected': 'සම්බන්ධිත',
+  'couriers.available': 'කූරියර් එකක් එක් කරන්න',
+  'couriers.parcels': 'පාර්සල් {count}',
+  'couriers.returns': 'ආපසු එවීම් {count}',
+  'couriers.onTime': '{pct}% භාර දී ඇත',
+  'couriers.avg': 'සාමාන්‍යයෙන් දින {days}',
+  'couriers.coverage': 'ආවරණය',
+  'couriers.baseRate': 'මූලික ගාස්තුව',
+  'couriers.returnFee': 'ආපසු එවීමේ ගාස්තුව',
+  'couriers.free': 'නොමිලේ',
+  'couriers.connect': 'සම්බන්ධ කරන්න',
+  'couriers.connectedToast': '{courier} සම්බන්ධ කළා',
+  'couriers.connectedSub': 'රැගෙන යාමක් වෙන් කරන විට එය දැන් පෙනේ',
+  'couriers.note':
+    'කූරියර් වෙන් කිරීමේදී මිල නොව භාරදීමේ අනුපාතය අනුව පෙළගස්වයි — පාර්සල් නැති කරන ලාභ කූරියර් වැඩි වියදමක් වේ.',
+
+  // ── Website ───────────────────────────────────────────────────────────────
+  'web.title': 'ඔබේ නොමිලේ වෙබ් අඩවිය',
+  'web.liveAt': 'සජීවීව',
+  'web.visit': 'බලන්න',
+  'web.last30': 'පසුගිය දින 30',
+  'web.visits': 'පිවිසුම්',
+  'web.ordersFromSite': 'අඩවියෙන් ඇණවුම්',
+  'web.storeDetails': 'සාප්පු විස්තර',
+  'web.storeName': 'සාප්පුවේ නම',
+  'web.tagline': 'ටැග්ලයින්',
+  'web.domain': 'වසම',
+  'web.customDomain': 'තමන්ගේම වසම් {plan} සැලසුමේ ඇත.',
+  'web.productsShown': 'පෙන්වන භාණ්ඩ',
+  'web.productsLive': 'භාණ්ඩ {total}න් {live}ක් සජීවීයි',
+  'web.productsNote': 'සක්‍රීය භාණ්ඩ ස්වයංක්‍රීයව පෙනේ. භාණ්ඩයක් එහි පිටුවෙන් සඟවන්න.',
+  'web.share': 'මගේ සාප්පු සබැඳිය බෙදන්න',
+  'web.shareMessage': '{shop} සමඟ සාප්පු සවාරි: {url}',
+
+  // ── Help centre ───────────────────────────────────────────────────────────
+  'help.title': 'උදව් මධ්‍යස්ථානය',
+  'help.intro': 'වෙළෙන්දන් සැබවින්ම අසන දේට පිළිතුරු.',
+  'help.stuck': 'තවමත් අමාරුද?',
+  'help.stuckBody': 'අපි සාමාන්‍යයෙන් පැය කිහිපයකින් සිංහල, දෙමළ හෝ ඉංග්‍රීසියෙන් පිළිතුරු දෙමු.',
+  'help.contact': 'WhatsApp හරහා සහාය ලබා ගන්න',
+  'help.cat.start': 'ආරම්භ කිරීම',
+  'help.cat.orders': 'ඇණවුම් සහ පාරිභෝගිකයන්',
+  'help.cat.cod': 'COD විශ්වසනීයත්වය',
+  'help.cat.billing': 'බිල්පත්',
+  'help.q.link': 'චැට් කරනවා වෙනුවට පාරිභෝගිකයන් Vendly හරහා ඇණවුම් කරන්නේ කෙසේද?',
+  'help.a.link':
+    'චැට් එකේදී ඔබේ ඇණවුම් සබැඳිය යවන්න. පාරිභෝගිකයා තමන්ගේ නම, අංකය සහ ලිපිනය පුරවයි, ඇණවුම ඇණවුම් තිරයට එයි — ඔබට නැවත ටයිප් කරන්න ඕන නැහැ.',
+  'help.q.chat': 'මට තවමත් Messenger සහ WhatsApp සාමාන්‍ය විදිහට පාවිච්චි කරන්න පුළුවන්ද?',
+  'help.a.chat':
+    'ඔව්. Vendly ඒවා අසලින් ක්‍රියා කරයි. චැට් එකේ සිටියදීම එකතු කිරීමේ බොත්තමෙන් ඔබටම ඇණවුමක් ටයිප් කළ හැක.',
+  'help.q.edit': 'ඇණවුමක් සෑදූ පසු එය සංස්කරණය කළ හැකිද?',
+  'help.a.edit':
+    'කූරියර් වෙන් කරන තුරු ඔව් — ඇණවුම විවෘත කර අයිතම, ලිපිනය හෝ ගෙවීම වෙනස් කරන්න. ලේබලය මුද්‍රණය කළ පසු අවලංගු කර නැවත සෑදිය යුතුය.',
+  'help.q.score': 'COD විශ්වසනීයත්වය ගණනය වන්නේ කෙසේද?',
+  'help.a.score':
+    'දොරකඩදී ප්‍රතික්ෂේප කිරීම එය අඩු කරයි, බාරගත් පාර්සල් එය වැඩි කරයි, කෙටි ඇණවුම් ඉතිහාසය පාරිභෝගිකයාට එරෙහිව ගණන් ගැනේ. පාරිභෝගිකයා අදහස වෙනස් කළ අවලංගු කිරීම් එයට බලපාන්නේ නැත.',
+  'help.q.override': 'පාරිභෝගිකයෙකුගේ ලකුණු මට වෙනස් කළ හැකිද?',
+  'help.a.override':
+    'ඔව්. පාරිභෝගිකයා විවෘත කර, ශ්‍රේණිගත කිරීම අතින් සකසන්න තට්ටු කර තලයක් තෝරන්න. ඔබ ඉවත් කරන තුරු එය පවතී.',
+  'help.q.shared': 'මෙම ලකුණු පාරිභෝගිකයා සමඟ වෙනත් සාප්පු වලට යයිද?',
+  'help.a.shared':
+    'නැත. ලකුණු ගොඩනැගෙන්නේ එම පාරිභෝගිකයාගේ ඔබේ සාප්පුව සමඟ ඇති ඉතිහාසයෙන් පමණි, ව්‍යාපාර අතර කිසිදා බෙදා නොගැනේ.',
+  'help.q.plan': 'ඕනෑම වේලාවක සැලසුම වෙනස් කළ හැකිද?',
+  'help.a.plan':
+    'ඔව්, වෙනස ඊළඟ අලුත් කිරීමේදී ක්‍රියාත්මක වේ. සෑම සැලසුමකම අසීමිත ඇණවුම් ඇති නිසා ඇණවුමකට ගෙවීමක් නැත.',
+
+  // ── Notification settings ─────────────────────────────────────────────────
+  'nset.title': 'දැනුම්දීම්',
+  'nset.intro': 'ඔබට බාධා කිරීම වටින දේ පමණයි.',
+  'nset.newOrder': 'නව ඇණවුමක් ලැබුණා',
+  'nset.cancelled': 'ඇණවුම අවලංගු විය',
+  'nset.lowStock': 'තොගය අඩු බවට අනතුරු ඇඟවීම',
+  'nset.risky': 'අවදානම් COD ඇණවුමක් ලැබුණා',
+  'nset.refused': 'පාර්සලය දොරකඩදී ප්‍රතික්ෂේප විය',
+  'nset.weekly': 'සතිපතා සාරාංශය',
+  'nset.pushEmail': 'තල්ලු සහ ඊමේල්',
+  'nset.pushOnly': 'තල්ලු පමණි',
+  'nset.mondays': 'සෑම සඳුදා උදෑසනක්ම එවයි',
+  'nset.quiet': 'නිශ්ශබ්ද වේලාවන්',
+  'nset.quietSub': 'රාත්‍රියේ හදිසි නොවන දැනුම්දීම් රඳවා තබන්න',
+  'nset.quietRange': 'රාත්‍රී 10 — උදෑසන 7',
+
+  // ── Subscription ──────────────────────────────────────────────────────────
+  'sub.title': 'දායකත්වය',
+  'sub.current': 'වත්මන් සැලසුම',
+  'sub.renewsOn': '{date} අලුත් වේ',
+  'sub.changePlan': 'සැලසුම වෙනස් කරන්න',
+  'sub.paymentMethod': 'ගෙවීම් ක්‍රමය',
+  'sub.managedOnWeb': 'කාඩ්පත් තොරතුරු vendly.lk/billing හි වෙනස් කරන්න',
+  'sub.billingHistory': 'බිල්පත් ඉතිහාසය',
+  'sub.receipt': 'රිසිට්පත',
+  'sub.cancel': 'දායකත්වය අවලංගු කරන්න',
+  'sub.cancelTitle': 'ඔබේ දායකත්වය අවලංගු කරන්නද?',
+  'sub.cancelBody':
+    '{date} දක්වා ඔබේ සාප්පුව ක්‍රියාත්මක වේ. ඉන් පසු ඔබේ ඇණවුම් සහ පාරිභෝගිකයන් සුරැකී පවතී, නමුත් යෙදුම කියවීමට පමණක් සීමා වේ.',
+  'sub.cancelKeep': 'මගේ සැලසුම තබාගන්න',
+  'sub.cancelled': 'අවලංගු කිරීම සැලසුම් කළා',
+  'sub.cancelledSub': 'ඔබේ සැලසුම {date} දක්වා ක්‍රියාත්මකයි',
+  'sub.perMonth': 'මසකට Rs {amount}',
+  'sub.currentBadge': 'වත්මන්',
+  'sub.switchTo': '{plan} වෙත මාරු වන්න',
+  'sub.switchTitle': '{plan} වෙත මාරු වන්නද?',
+  'sub.switchBody':
+    'වෙනස ඔබේ මීළඟ අලුත් කිරීමේදී, {date} දින ක්‍රියාත්මක වේ. එතෙක් වත්මන් සැලසුමේ සියල්ල ඔබට තිබේ.',
+  'sub.switched': 'සැලසුම් වෙනස සැලසුම් කළා',
+  'sub.switchedSub': '{plan} {date} දින ආරම්භ වේ',
+  'sub.receiptMessage': '{shop} — {period} සඳහා Vendly රිසිට්පත: Rs {amount}.',
+  'plan.starter': 'Starter',
+  'plan.growth': 'Growth',
+  'plan.business': 'Business',
+  'plan.f.orders': 'අසීමිත ඇණවුම්',
+  'plan.f.products': 'භාණ්ඩ 50 දක්වා',
+  'plan.f.website': 'නොමිලේ වෙබ් අඩවිය',
+  'plan.f.alerts': 'COD විශ්වසනීයත්ව අනතුරු ඇඟවීම්',
+  'plan.f.staff': 'කාර්ය මණ්ඩල පිවිසුම්',
+  'plan.f.rates': 'කූරියර් ගාස්තු සංසන්දනය',
+  'plan.f.domain': 'තමන්ගේම වසම',
+  'plan.f.api': 'API ප්‍රවේශය',
+
+  // ── Add stock sheet ───────────────────────────────────────────────────────
+  'stock.title': 'තොගය එකතු කරන්න',
+  'stock.body': 'සැපයුම්කරුගෙන් ලැබුණු දේ සටහන් කරන්න. මෙය දැන් රාක්කයේ ඇති දෙයට එකතු වේ.',
+  'stock.received': 'ලැබුණා',
+  'stock.newTotal': 'නව එකතුව',
+  'stock.save': 'තොගයට එකතු කරන්න',
+
+  // ── Analytics period + export ─────────────────────────────────────────────
+  'period.title': 'සංඛ්‍යා පෙන්වන්නේ',
+  'period.thisMonth': 'මෙම මාසය',
+  'period.lastMonth': 'පසුගිය මාසය',
+  'period.last7': 'පසුගිය දින 7',
+  'period.last90': 'පසුගිය දින 90',
+  'export.title': '{period} නිර්යාත කරන්න',
+  'export.body': 'ආකෘතියක් තෝරන්න. ගොනුව කෙලින්ම WhatsApp වෙත බෙදේ.',
+  'export.pdf': 'PDF සාරාංශය',
+  'export.excel': 'Excel වැඩපොත',
+  'export.csv': 'සෑම ඇණවුමකම CSV',
+  'export.shared': '{period} බෙදාගත්තා',
+  'export.sharedSub': 'WhatsApp වෙත යවන ලදී',
+
+  // ── Today ─────────────────────────────────────────────────────────────────
+  'nav.today': 'අද',
+  'nav.insights': 'විශ්ලේෂණ',
+  'nav.account': 'ගිණුම',
+  'today.title': 'අද',
+  'today.decisionsTitle': 'ඔබේ තීරණය අවශ්‍යයි',
+  'today.decisionsSub': 'යවනවාද නැද්ද යන තීරණය බලා සිටින COD ඇණවුම්',
+  'today.decisionsEmpty': 'සියල්ල පරීක්ෂා කර ඇත',
+  'today.decisionsEmptySub':
+    'තීරණයක් බලා සිටින COD ඇණවුමක් නැත. නව අවදානම් ඇණවුම් මුලින්ම මෙහි පෙන්වයි.',
+  'today.atRisk': 'අවදානමේ',
+  'today.atRiskSub': 'තවම ඔබ මත රඳා පවතින ඇණවුම් {count}ක් හරහා',
+  'today.onTheRoad': 'මගදී',
+  'today.onTheRoadSub': 'COD පාර්සල් {count}ක් පිටතට',
+  'today.collected': 'අද එකතු කළා',
+  'today.readyToPack': 'ඇසුරුම් කිරීමට සූදානම්',
+  'today.readyToPackSub': 'තහවුරු කළ {count}ක්, ලේබලයක් බලාපොරොත්තුවෙන්',
+  'today.outForDelivery': 'බෙදාහැරීමට',
+  'today.ship': 'යවන්න',
+  'today.askAdvance': 'අත්තිකාරම් ඉල්ලන්න',
+  'today.reviewAll': 'සියල්ල බලන්න',
+  'today.pack': 'ඇසුරුම්',
+  'today.decided': 'තීරණය කළා',
+  'today.decidedSub': 'ඇසුරුම් කිරීමට සූදානම් වෙත ගෙන ගියා',
+  'today.held': 'තබා ගත්තා',
+  'today.heldSub': 'WhatsApp හි අත්තිකාරම් ඉල්ලීම කෙටුම්පත් කළා',
+  'today.undo': 'අහෝසි',
+  'today.openShop': 'සාප්පු සැකසුම්',
+
+  // ── Orders / Customers ────────────────────────────────────────────────────
+  'orders.viewOrders': 'ඇණවුම්',
+  'orders.viewCustomers': 'ගනුදෙනුකරුවෝ',
+
+  // ── Insights ──────────────────────────────────────────────────────────────
+  'insights.title': 'විශ්ලේෂණ',
+  'insights.codHealth': 'COD තත්ත්වය',
+  'insights.openReliability': 'COD විශ්වසනීයත්වය විවෘත කරන්න',
+  'insights.refusalRate': 'ප්‍රතික්ෂේප අනුපාතය',
+  'insights.moneyAtRisk': 'අවදානමේ ඇති මුදල',
+
+  // ── Account ───────────────────────────────────────────────────────────────
+  'account.title': 'ගිණුම',
+  'account.shop': 'සාප්පුව',
+  'account.preferences': 'මනාපයන්',
+  'account.support': 'සහාය',
+
+  // ── Shared ────────────────────────────────────────────────────────────────
+  'common.close': 'වසන්න',
+  'common.back': 'ආපසු',
+  'common.decrease': 'අඩු කරන්න',
+  'common.increase': 'වැඩි කරන්න',
+};
