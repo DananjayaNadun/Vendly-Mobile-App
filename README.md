@@ -2,7 +2,7 @@
 
 An Expo / React Native implementation of the **Mobile app UI/UX design** handoff
 (`Vendly Mobile.dc.html`) — an order-management app for Sri Lankan Facebook and
-WhatsApp sellers, built around one question: *is this COD order safe to ship?*
+WhatsApp SME sellers, built around one question: *is this COD order safe to ship?*
 
 > All 22 designed screens are implemented, in three languages and two themes.
 
