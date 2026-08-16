@@ -8,6 +8,7 @@ import { shop } from '@/data/shop';
 import { LineIcon } from '@/icons/line';
 import { useI18n, type TranslationKey } from '@/i18n';
 import { brand, brandChip, brandRadius } from '@/theme/brand';
+import { Rise } from '@/theme/motion';
 
 /**
  * 10 · Business profile.
@@ -54,7 +55,7 @@ export default function BusinessProfileScreen() {
         contentContainerStyle={{ paddingBottom: 48 }}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={{ alignItems: 'center', paddingTop: 28 }}>
+        <Rise style={{ alignItems: 'center', paddingTop: 28 }}>
           <View
             style={{
               width: 98,
@@ -84,16 +85,17 @@ export default function BusinessProfileScreen() {
               {shop.category}
             </Txt>
           </View>
-        </View>
+        </Rise>
 
         <View style={{ paddingTop: 30, paddingHorizontal: 36, gap: 20 }}>
-          {FIELDS.map((field) => (
-            <BrandField
-              key={field.key}
-              label={t(field.label)}
-              value={values[field.key]}
-              onChange={(next) => setValues((prev) => ({ ...prev, [field.key]: next }))}
-            />
+          {FIELDS.map((field, i) => (
+            <Rise key={field.key} index={1 + i}>
+              <BrandField
+                label={t(field.label)}
+                value={values[field.key]}
+                onChange={(next) => setValues((prev) => ({ ...prev, [field.key]: next }))}
+              />
+            </Rise>
           ))}
         </View>
       </ScrollView>

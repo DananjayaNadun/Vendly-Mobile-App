@@ -7,6 +7,7 @@ import { Txt } from '@/components/Txt';
 import { LineIcon } from '@/icons/line';
 import { useT } from '@/i18n';
 import { brand, brandSize } from '@/theme/brand';
+import { Rise } from '@/theme/motion';
 
 /**
  * Shown when a route names a record that does not exist.
@@ -31,7 +32,7 @@ export function NotFound({ title, message }: { title: string; message: string })
           gap: 16,
         }}
       >
-        <View
+        <Rise
           style={{
             width: 64,
             height: 64,
@@ -42,22 +43,28 @@ export function NotFound({ title, message }: { title: string; message: string })
           }}
         >
           <LineIcon name="search" size={28} color={brand.muted} />
-        </View>
+        </Rise>
 
-        <Txt size={19} weight={600} align="center" color={brand.text}>
-          {title}
-        </Txt>
-        <Txt size={13.5} leading={1.55} align="center" color={brand.body}>
-          {message}
-        </Txt>
+        <Rise index={1}>
+          <Txt size={19} weight={600} align="center" color={brand.text}>
+            {title}
+          </Txt>
+        </Rise>
+        <Rise index={2}>
+          <Txt size={13.5} leading={1.55} align="center" color={brand.body}>
+            {message}
+          </Txt>
+        </Rise>
 
-        <BrandButton
-          pill
-          variant="outline"
-          label={t('common.back')}
-          onPress={() => router.back()}
-          style={{ alignSelf: 'stretch', marginTop: 8 }}
-        />
+        <Rise index={3} style={{ alignSelf: 'stretch' }}>
+          <BrandButton
+            pill
+            variant="outline"
+            label={t('common.back')}
+            onPress={() => router.back()}
+            style={{ marginTop: 8 }}
+          />
+        </Rise>
       </View>
     </View>
   );

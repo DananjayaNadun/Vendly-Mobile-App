@@ -64,12 +64,20 @@ const PROVIDERS = [
   { key: 'apple', label: 'Apple', Mark: Apple },
 ];
 
-export function SocialRow({ size = 46 }: { size?: number }) {
+export function SocialRow({
+  size = 46,
+  onPress,
+}: {
+  size?: number;
+  /** Called with the provider's name. Required — a silent button is the bug. */
+  onPress: (provider: string) => void;
+}) {
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 30, paddingTop: 24 }}>
       {PROVIDERS.map(({ key, label, Mark }) => (
         <Tap
           key={key}
+          onPress={() => onPress(label)}
           accessibilityRole="button"
           accessibilityLabel={label}
           hitSlop={8}

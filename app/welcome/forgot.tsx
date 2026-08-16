@@ -7,6 +7,7 @@ import { BrandBar, BrandButton, BrandField, BrandLink, Gap } from '@/components/
 import { Txt } from '@/components/Txt';
 import { useI18n } from '@/i18n';
 import { brand, brandRadius, brandSize } from '@/theme/brand';
+import { Rise } from '@/theme/motion';
 
 /**
  * 04 · Reset password.
@@ -34,7 +35,7 @@ export default function ForgotPasswordScreen() {
         }}
         keyboardShouldPersistTaps="handled"
       >
-        <View
+        <Rise
           style={{
             borderRadius: brandRadius.info,
             backgroundColor: brand.infoCard,
@@ -54,35 +55,39 @@ export default function ForgotPasswordScreen() {
               {t('auth.resetBody')}
             </Txt>
           </View>
-        </View>
+        </Rise>
 
         <Gap h={38} />
-        <BrandField
-          label={t('auth.email')}
-          placeholder={t('auth.emailPlaceholder')}
-          value={email}
-          onChange={setEmail}
-          keyboard="email-address"
-          autoComplete="email"
-        />
+        <Rise index={1}>
+          <BrandField
+            label={t('auth.email')}
+            placeholder={t('auth.emailPlaceholder')}
+            value={email}
+            onChange={setEmail}
+            keyboard="email-address"
+            autoComplete="email"
+          />
+        </Rise>
 
         <Gap h={24} />
-        <BrandButton
-          pill
-          tall
-          label={t('auth.sendReset')}
-          onPress={() => router.push('/welcome/otp?mode=reset')}
-        />
+        <Rise index={2}>
+          <BrandButton
+            pill
+            tall
+            label={t('auth.sendReset')}
+            onPress={() => router.push('/welcome/otp?mode=reset')}
+          />
+        </Rise>
 
         <Gap h={29} />
-        <View style={{ alignItems: 'center' }}>
+        <Rise index={3} style={{ alignItems: 'center' }}>
           <BrandLink
             label={t('auth.backToLogin')}
             color={brand.text}
             size={16}
             onPress={() => router.back()}
           />
-        </View>
+        </Rise>
       </ScrollView>
     </KeyboardAvoidingView>
   );

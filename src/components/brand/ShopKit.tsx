@@ -6,6 +6,7 @@ import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
 import { LineIcon, type LineIconName } from '@/icons/line';
 import { useI18n } from '@/i18n';
+import { useCountUp } from '@/theme/motion';
 import { familyFor } from '@/theme/fonts';
 import { brand, brandChip, brandRadius, brandType, type BrandChip } from '@/theme/brand';
 
@@ -178,6 +179,7 @@ export function StatTile({
   valueColor = brand.text,
   valueSize = 26,
   iconFirst,
+  countUp,
 }: {
   label: string;
   value: string;
@@ -188,6 +190,12 @@ export function StatTile({
   valueColor?: string;
   valueSize?: number;
   iconFirst?: boolean;
+  /**
+   * Counts the figure up on mount. Only for tiles whose value is a plain
+   * number or a plain amount — the count-up parses digits out of the string
+   * and puts the rest back, so it leaves `LKR` and `%` where they were.
+   */
+  countUp?: boolean;
 }) {
   const square = (
     <View
@@ -204,6 +212,8 @@ export function StatTile({
     </View>
   );
 
+  const shown = useAnimatedFigure(value, !!countUp);
+
   return (
     <ShopCard style={{ flex: 1, minHeight: 120 }} padding={16}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -215,7 +225,7 @@ export function StatTile({
       </View>
       <View style={{ flex: 1, minHeight: 12 }} />
       <Txt size={valueSize} weight={700} tracking={-0.03} color={valueColor}>
-        {value}
+        {shown}
       </Txt>
       {delta ? (
         <Txt size={13} weight={600} color="#37BC1D" style={{ marginTop: 6 }}>
@@ -248,4 +258,19 @@ export function Lkr({
 /** The circular avatar the order and customer rows use. */
 export function ShopAvatar({ size = 44 }: { size?: number }) {
   return <LineIcon name="avatar" size={size} color={brand.text} strokeWidth={1.6} />;
+}
+
+/**
+ * Counts the digits inside a formatted figure up to their final value.
+ *
+ * Splitting the string rather than taking a number keeps the caller honest:
+ * a tile shows `LKR 80,000` or `92%`, and the prefix and suffix have to survive
+ * the animation intact.
+ */
+function useAnimatedFigure(value: string, enabled: boolean): string {
+  const match = value.match(/^(\D*)([\d,]+)(.*)$/);
+  const target = match ? Number(match[2].replace(/,/g, '')) : 0;
+  const shown = useCountUp(target, enabled && !!match);
+  if (!match || !enabled) return value;
+  return `${match[1]}${shown.toLocaleString('en-US')}${match[3]}`;
 }

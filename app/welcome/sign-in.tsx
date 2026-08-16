@@ -1,13 +1,15 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BrandButton, BrandField, BrandLink, Gap } from '@/components/brand/BrandKit';
 import { SocialRow } from '@/components/brand/Social';
+import { Toast } from '@/components/Overlays';
 import { Txt } from '@/components/Txt';
 import { useI18n } from '@/i18n';
 import { brand, brandSize } from '@/theme/brand';
+import { Rise } from '@/theme/motion';
 
 /**
  * 03 · Sign in.
@@ -21,6 +23,13 @@ export default function SignInScreen() {
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [toast, setToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), 3400);
+    return () => clearTimeout(timer);
+  }, [toast]);
 
   return (
     <KeyboardAvoidingView
@@ -31,7 +40,7 @@ export default function SignInScreen() {
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
         keyboardShouldPersistTaps="handled"
       >
-        <View
+        <Rise
           style={{
             backgroundColor: brand.primary,
             paddingTop: insets.top + 30,
@@ -46,9 +55,12 @@ export default function SignInScreen() {
           <Txt size={13.5} color={brand.onPrimaryMuted}>
             {t('auth.signInSub')}
           </Txt>
-        </View>
+        </Rise>
 
-        <View style={{ paddingTop: 34, paddingHorizontal: brandSize.formGutter, gap: 20 }}>
+        <Rise
+          index={1}
+          style={{ paddingTop: 34, paddingHorizontal: brandSize.formGutter, gap: 20 }}
+        >
           <BrandField
             label={t('auth.email')}
             value={email}
@@ -71,13 +83,14 @@ export default function SignInScreen() {
               onPress={() => router.push('/welcome/forgot')}
             />
           </View>
-        </View>
+        </Rise>
 
-        <View style={{ paddingTop: 24, paddingHorizontal: brandSize.gutter }}>
+        <Rise index={2} style={{ paddingTop: 24, paddingHorizontal: brandSize.gutter }}>
           <BrandButton pill tall label={t('auth.signIn')} onPress={() => router.replace('/home')} />
-        </View>
+        </Rise>
 
-        <View
+        <Rise
+          index={3}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -91,11 +104,14 @@ export default function SignInScreen() {
             {t('auth.orContinue')}
           </Txt>
           <View style={{ flex: 1, height: 1, backgroundColor: brand.rule }} />
-        </View>
+        </Rise>
 
-        <SocialRow />
+        <Rise index={4}>
+          <SocialRow onPress={(provider) => setToast(t('shop.socialSoon', { provider }))} />
+        </Rise>
 
-        <View
+        <Rise
+          index={5}
           style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
@@ -114,8 +130,10 @@ export default function SignInScreen() {
             color={brand.linkAlt}
             onPress={() => router.push('/welcome/sign-up')}
           />
-        </View>
+        </Rise>
       </ScrollView>
+
+      <Toast visible={!!toast} title={toast ?? ''} bottom={28} />
     </KeyboardAvoidingView>
   );
 }

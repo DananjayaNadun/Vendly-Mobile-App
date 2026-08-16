@@ -9,6 +9,7 @@ import { Txt } from '@/components/Txt';
 import { LineIcon, type LineIconName } from '@/icons/line';
 import { useI18n, type TranslationKey } from '@/i18n';
 import { brand, brandRadius, brandSize, brandType } from '@/theme/brand';
+import { Rise } from '@/theme/motion';
 
 /**
  * 02 · Onboarding.
@@ -44,6 +45,7 @@ export default function OnboardingScreen() {
           {/* The mark *is* the V: "endly.lk" runs off it on the same baseline.
               Labelled as a whole, because the letterform is drawn rather than
               typed — a screen reader would otherwise announce "endly.lk". */}
+          <Rise>
           <View
             accessible
             accessibilityRole="image"
@@ -64,8 +66,10 @@ export default function OnboardingScreen() {
               </Txt>
             </Txt>
           </View>
+          </Rise>
 
           <Gap h={26} />
+          <Rise index={1}>
           <Txt
             size={16}
             weight={500}
@@ -75,11 +79,16 @@ export default function OnboardingScreen() {
           >
             {t('auth.tagline')}
           </Txt>
+          </Rise>
 
           <Gap h={72} />
           <View style={{ flexDirection: 'row', gap: 14 }}>
-            {TILES.map((tile) => (
-              <View key={tile.key} style={{ alignItems: 'center', gap: 8, width: 74 }}>
+            {TILES.map((tile, i) => (
+              <Rise
+                key={tile.key}
+                index={2 + i}
+                style={{ alignItems: 'center', gap: 8, width: 74 }}
+              >
                 <View
                   style={{
                     width: 52,
@@ -97,7 +106,7 @@ export default function OnboardingScreen() {
                 <Txt size={12.5} weight={500} align="center" color="rgba(255,255,255,0.94)">
                   {t(tile.key)}
                 </Txt>
-              </View>
+              </Rise>
             ))}
           </View>
         </BrandGradient>
@@ -109,21 +118,26 @@ export default function OnboardingScreen() {
             paddingBottom: insets.bottom + 28,
           }}
         >
-          <BrandButton
-            tall
-            label={t('auth.getStarted')}
-            onPress={() => router.push('/welcome/sign-up')}
-          />
+          <Rise index={6}>
+            <BrandButton
+              tall
+              label={t('auth.getStarted')}
+              onPress={() => router.push('/welcome/sign-up')}
+            />
+          </Rise>
           <Gap h={16} />
-          <BrandButton
-            tall
-            variant="outline"
-            label={t('auth.haveAccount')}
-            onPress={() => router.push('/welcome/sign-in')}
-          />
+          <Rise index={7}>
+            <BrandButton
+              tall
+              variant="outline"
+              label={t('auth.haveAccount')}
+              onPress={() => router.push('/welcome/sign-in')}
+            />
+          </Rise>
 
           <Gap h={34} />
-          <View
+          <Rise
+            index={8}
             style={{
               flexDirection: 'row',
               flexWrap: 'wrap',
@@ -136,7 +150,7 @@ export default function OnboardingScreen() {
               {t('auth.terms')}
             </Txt>
             <BrandLink label={t('auth.termsLink')} size={12.5} weight={500} />
-          </View>
+          </Rise>
         </View>
       </ScrollView>
     </View>

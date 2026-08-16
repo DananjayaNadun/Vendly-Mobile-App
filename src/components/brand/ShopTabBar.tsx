@@ -1,6 +1,6 @@
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
-import React, { useId } from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useId, useRef } from 'react';
+import { Animated, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
@@ -8,6 +8,7 @@ import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
 import { LineIcon, type LineIconName } from '@/icons/line';
 import { useT, type TranslationKey } from '@/i18n';
+import { useReduceMotion } from '@/theme/motion';
 import { brand, brandSize } from '@/theme/brand';
 
 /**
@@ -51,35 +52,85 @@ export function ShopTabBar({ state, navigation }: BottomTabBarProps) {
       </Svg>
 
       <View style={{ flexDirection: 'row', height: brandSize.tabBar }}>
-        {TABS.map((tab) => {
-          const focused = tab.name === active;
-          return (
-            <Tap
-              key={tab.name}
-              accessibilityRole="tab"
-              accessibilityState={{ selected: focused }}
-              aria-selected={focused}
-              accessibilityLabel={t(tab.labelKey)}
-              feedback="opacity"
-              onPress={() => {
-                if (!focused) navigation.navigate(tab.name);
-              }}
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 4,
-                opacity: focused ? 1 : 0.62,
-              }}
-            >
-              <LineIcon name={tab.icon} size={21} color="#FFFFFF" strokeWidth={focused ? 2 : 1.7} />
-              <Txt size={9.5} weight={600} align="center" color="#FFFFFF">
-                {t(tab.labelKey)}
-              </Txt>
-            </Tap>
-          );
-        })}
+        {TABS.map((tab) => (
+          <TabItem
+            key={tab.name}
+            tab={tab}
+            focused={tab.name === active}
+            onPress={() => {
+              if (tab.name !== active) navigation.navigate(tab.name);
+            }}
+          />
+        ))}
       </View>
     </View>
+  );
+}
+
+/**
+ * One destination.
+ *
+ * The focused state lifts and brightens rather than switching instantly: the
+ * bar is the only persistent chrome in the app, and an instant swap gives no
+ * sense of having moved between places. Opacity never drops below 0.62 so the
+ * unfocused labels stay legible on the blue.
+ */
+function TabItem({
+  tab,
+  focused,
+  onPress,
+}: {
+  tab: Tab;
+  focused: boolean;
+  onPress: () => void;
+}) {
+  const t = useT();
+  const progress = useRef(new Animated.Value(focused ? 1 : 0)).current;
+  const reduced = useReduceMotion();
+
+  useEffect(() => {
+    if (reduced) {
+      progress.setValue(focused ? 1 : 0);
+      return;
+    }
+    const animation = Animated.spring(progress, {
+      toValue: focused ? 1 : 0,
+      tension: 240,
+      friction: 20,
+      useNativeDriver: true,
+    });
+    animation.start();
+    return () => animation.stop();
+  }, [focused, progress, reduced]);
+
+  return (
+    <Tap
+      accessibilityRole="tab"
+      accessibilityState={{ selected: focused }}
+      aria-selected={focused}
+      accessibilityLabel={t(tab.labelKey)}
+      feedback="opacity"
+      onPress={onPress}
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 4 }}
+    >
+      <Animated.View
+        style={{
+          opacity: progress.interpolate({ inputRange: [0, 1], outputRange: [0.62, 1] }),
+          transform: [
+            { scale: progress.interpolate({ inputRange: [0, 1], outputRange: [1, 1.12] }) },
+            { translateY: progress.interpolate({ inputRange: [0, 1], outputRange: [0, -1] }) },
+          ],
+        }}
+      >
+        <LineIcon name={tab.icon} size={21} color="#FFFFFF" strokeWidth={focused ? 2 : 1.7} />
+      </Animated.View>
+      <Animated.View
+        style={{ opacity: progress.interpolate({ inputRange: [0, 1], outputRange: [0.62, 1] }) }}
+      >
+        <Txt size={9.5} weight={600} align="center" color="#FFFFFF">
+          {t(tab.labelKey)}
+        </Txt>
+      </Animated.View>
+    </Tap>
   );
 }

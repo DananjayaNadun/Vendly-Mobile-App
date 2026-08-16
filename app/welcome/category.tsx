@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Animated, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BrandButton, Gap } from '@/components/brand/BrandKit';
@@ -8,12 +8,17 @@ import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
 import { useI18n, type TranslationKey } from '@/i18n';
 import { brand, brandRadius, brandSize, brandType } from '@/theme/brand';
+import { Rise, useAnimatedNumber } from '@/theme/motion';
 
 /**
  * 07 · Business category — the last step before the app.
  *
  * The CTA floats over the list rather than sitting at the end of it, so the
  * choice can be changed and confirmed without scrolling back down.
+ *
+ * Selection is drawn as a ring that fades over the card's resting border, so
+ * moving the choice down the list reads as one mark travelling rather than two
+ * borders swapping colour at the same instant.
  */
 
 type Category = { key: string; emoji: string; title: TranslationKey; sub: TranslationKey };
@@ -41,7 +46,7 @@ export default function CategoryScreen() {
           paddingBottom: insets.bottom + brandSize.cta + 80,
         }}
       >
-        <View style={{ paddingHorizontal: 30 }}>
+        <Rise style={{ paddingHorizontal: 30 }}>
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
             <Txt
               flex={1}
@@ -58,55 +63,18 @@ export default function CategoryScreen() {
           <Txt size={13.5} leading={1.55} color="#626262" style={{ maxWidth: 260 }}>
             {t('auth.categorySub')}
           </Txt>
-        </View>
+        </Rise>
 
         <View style={{ paddingTop: 26, paddingHorizontal: 30, gap: 18 }}>
-          {CATEGORIES.map((category) => {
-            const active = category.key === selected;
-            return (
-              <Tap
-                key={category.key}
-                onPress={() => setSelected(category.key)}
-                accessibilityRole="radio"
-                // ARIA expects `checked` on a radio, and react-native-web does
-                // not derive it from `accessibilityState` — without this the
-                // chosen category is signalled by border colour alone.
-                aria-checked={active}
-                accessibilityLabel={t(category.title)}
-                style={{
-                  minHeight: 71,
-                  borderRadius: brandRadius.card,
-                  backgroundColor: brand.surface,
-                  borderWidth: 1.5,
-                  borderColor: active ? brand.primary : '#E8E8E8',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 14,
-                  paddingHorizontal: 18,
-                  paddingVertical: 12,
-                  shadowColor: '#000000',
-                  shadowOpacity: 0.05,
-                  shadowRadius: 2,
-                  shadowOffset: { width: 0, height: 1 },
-                  elevation: 1,
-                }}
-              >
-                <Txt size={22}>{category.emoji}</Txt>
-                <View style={{ flex: 1, gap: 4 }}>
-                  <Txt
-                    size={brandType.cardTitle.size}
-                    weight={brandType.cardTitle.weight}
-                    color={brand.text}
-                  >
-                    {t(category.title)}
-                  </Txt>
-                  <Txt size={12} color="#8B8B8B">
-                    {t(category.sub)}
-                  </Txt>
-                </View>
-              </Tap>
-            );
-          })}
+          {CATEGORIES.map((category, i) => (
+            <CategoryCard
+              key={category.key}
+              category={category}
+              index={i}
+              active={category.key === selected}
+              onPress={() => setSelected(category.key)}
+            />
+          ))}
         </View>
       </ScrollView>
 
@@ -127,5 +95,81 @@ export default function CategoryScreen() {
         />
       </View>
     </View>
+  );
+}
+
+function CategoryCard({
+  category,
+  index,
+  active,
+  onPress,
+}: {
+  category: Category;
+  index: number;
+  active: boolean;
+  onPress: () => void;
+}) {
+  const { t } = useI18n();
+  const ring = useAnimatedNumber(active ? 1 : 0);
+
+  return (
+    <Rise index={index}>
+      <Tap
+        onPress={onPress}
+        accessibilityRole="radio"
+        // ARIA expects `checked` on a radio, and react-native-web does not
+        // derive it from `accessibilityState` — without this the chosen
+        // category is signalled by border colour alone.
+        aria-checked={active}
+        accessibilityLabel={t(category.title)}
+        style={{
+          minHeight: 71,
+          borderRadius: brandRadius.card,
+          backgroundColor: brand.surface,
+          borderWidth: 1.5,
+          borderColor: '#E8E8E8',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 14,
+          paddingHorizontal: 18,
+          paddingVertical: 12,
+          shadowColor: '#000000',
+          shadowOpacity: 0.05,
+          shadowRadius: 2,
+          shadowOffset: { width: 0, height: 1 },
+          elevation: 1,
+        }}
+      >
+        {/* Sits exactly over the resting border — the card is inset by its own
+            1.5pt border, so the negative offsets put this back on top of it. */}
+        <Animated.View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            top: -1.5,
+            left: -1.5,
+            right: -1.5,
+            bottom: -1.5,
+            borderRadius: brandRadius.card,
+            borderWidth: 1.5,
+            borderColor: brand.primary,
+            opacity: ring,
+          }}
+        />
+        <Txt size={22}>{category.emoji}</Txt>
+        <View style={{ flex: 1, gap: 4 }}>
+          <Txt
+            size={brandType.cardTitle.size}
+            weight={brandType.cardTitle.weight}
+            color={brand.text}
+          >
+            {t(category.title)}
+          </Txt>
+          <Txt size={12} color="#8B8B8B">
+            {t(category.sub)}
+          </Txt>
+        </View>
+      </Tap>
+    </Rise>
   );
 }

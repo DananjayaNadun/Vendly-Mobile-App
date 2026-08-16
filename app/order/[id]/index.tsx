@@ -7,11 +7,12 @@ import { ShopAvatar, ShopCard, ShopChip } from '@/components/brand/ShopKit';
 import { NotFound } from '@/components/NotFound';
 import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
-import { SOURCE_CHIP, STATUS_CHIP, findShopOrder } from '@/data/shop';
+import { SOURCE_CHIP, STATUS_CHIP, STATUS_LABEL, findShopOrder } from '@/data/shop';
 import { LineIcon } from '@/icons/line';
 import { callNumber, openWhatsApp } from '@/lib/links';
 import { useI18n } from '@/i18n';
 import { brand, brandRadius } from '@/theme/brand';
+import { Rise } from '@/theme/motion';
 
 /**
  * 12 · Order detail.
@@ -19,6 +20,9 @@ import { brand, brandRadius } from '@/theme/brand';
  * The customer card repeats the row from the list, with call and chat beside
  * it, then the items, the address and the courier. Section labels sit outside
  * the cards, as the design draws them.
+ *
+ * Each label rises with its own card — a shared stagger index per section, so
+ * the four blocks arrive as four blocks rather than eight loose pieces.
  */
 export default function OrderDetailScreen() {
   const { t } = useI18n();
@@ -34,13 +38,14 @@ export default function OrderDetailScreen() {
         onBack={() => router.back()}
         trailing={
           <View style={{ paddingRight: 8 }}>
-            <ShopChip label={order.status} tone={STATUS_CHIP[order.status]} />
+            <ShopChip label={t(STATUS_LABEL[order.status])} tone={STATUS_CHIP[order.status]} />
           </View>
         }
       />
 
       <ScrollView contentContainerStyle={{ padding: 20, gap: 8, paddingBottom: 40 }}>
-        <SectionLabel>{t('shop.customer')}</SectionLabel>
+        <SectionLabel index={0}>{t('shop.customer')}</SectionLabel>
+        <Rise index={0}>
         <ShopCard padding={0}>
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 14, padding: 16 }}>
             <ShopAvatar />
@@ -49,7 +54,7 @@ export default function OrderDetailScreen() {
                 {order.name}
               </Txt>
               <Txt size={11.5} color="#A4A4A4">
-                {order.item}
+                {t('shop.itemQty', { name: order.item.product, qty: order.item.qty })}
               </Txt>
             </View>
             <View style={{ flexDirection: 'row', gap: 11 }}>
@@ -94,8 +99,10 @@ export default function OrderDetailScreen() {
             </Txt>
           </View>
         </ShopCard>
+        </Rise>
 
-        <SectionLabel>{t('shop.orderItems')}</SectionLabel>
+        <SectionLabel index={1}>{t('shop.orderItems')}</SectionLabel>
+        <Rise index={1}>
         <ShopCard padding={0}>
           <View
             style={{
@@ -107,7 +114,7 @@ export default function OrderDetailScreen() {
             }}
           >
             <Txt flex={1} size={14} weight={600} color={brand.text}>
-              {order.item}
+              {t('shop.itemQty', { name: order.item.product, qty: order.item.qty })}
             </Txt>
             <Txt size={14} weight={600} color={brand.text}>
               LKR {order.amount.toLocaleString('en-US')}
@@ -131,15 +138,19 @@ export default function OrderDetailScreen() {
             </Txt>
           </View>
         </ShopCard>
+        </Rise>
 
-        <SectionLabel>{t('shop.shippingAddress')}</SectionLabel>
+        <SectionLabel index={2}>{t('shop.shippingAddress')}</SectionLabel>
+        <Rise index={2}>
         <ShopCard>
           <Txt size={13.5} leading={1.65} color={brand.text}>
             {order.address}
           </Txt>
         </ShopCard>
+        </Rise>
 
-        <SectionLabel>{t('shop.courierPayment')}</SectionLabel>
+        <SectionLabel index={3}>{t('shop.courierPayment')}</SectionLabel>
+        <Rise index={3}>
         <ShopCard>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             <Txt flex={1} size={14} weight={600} color={brand.text}>
@@ -150,16 +161,19 @@ export default function OrderDetailScreen() {
             </Txt>
           </View>
         </ShopCard>
+        </Rise>
       </ScrollView>
     </View>
   );
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionLabel({ children, index }: { children: React.ReactNode; index: number }) {
   return (
-    <Txt size={14.5} weight={600} color="#727272" style={{ paddingTop: 14, paddingLeft: 6 }}>
-      {children}
-    </Txt>
+    <Rise index={index}>
+      <Txt size={14.5} weight={600} color="#727272" style={{ paddingTop: 14, paddingLeft: 6 }}>
+        {children}
+      </Txt>
+    </Rise>
   );
 }
 

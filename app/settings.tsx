@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { SheetRow, ShopSheet } from '@/components/brand/ShopSheet';
 import { Toast } from '@/components/Overlays';
 import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
@@ -16,15 +17,30 @@ import {
   type TranslationKey,
 } from '@/i18n';
 import { brand, brandChip, brandRadius } from '@/theme/brand';
+import { Rise } from '@/theme/motion';
 
 /**
  * 09 · Settings.
  *
  * Full-bleed rows with hairline separators, an identity block at the top and
  * the logout pill on its right. Reached from the avatar on Home.
+ *
+ * The rows arrive in one continuous stagger across the three groups, so the
+ * page reads as a single list broken by headings rather than three lists.
  */
 
 type Row = { key: string; icon: LineIconName; label: TranslationKey; href?: string };
+
+/**
+ * Each language named in itself, which is the one label a speaker can always
+ * recognise. `<Txt script>` renders each in its own face — Instrument Sans has
+ * no coverage for either of the other two.
+ */
+const LANGUAGE_NAMES: Record<Locale, string> = {
+  en: 'English',
+  si: 'සිංහල',
+  ta: 'தமிழ்',
+};
 
 const BUSINESS: Row[] = [
   { key: 'profile', icon: 'store', label: 'shop.businessProfile', href: '/business-profile' },
@@ -37,6 +53,7 @@ export default function SettingsScreen() {
   const { t, locale, setLocale } = useI18n();
   const insets = useSafeAreaInsets();
   const [toast, setToast] = useState<string | null>(null);
+  const [langOpen, setLangOpen] = useState(false);
 
   useEffect(() => {
     if (!toast) return;
@@ -65,7 +82,7 @@ export default function SettingsScreen() {
         <Rule />
 
         {/* ── Identity ─────────────────────────────────────────────────── */}
-        <View
+        <Rise
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -127,34 +144,39 @@ export default function SettingsScreen() {
               {t('shop.logout')}
             </Txt>
           </Tap>
-        </View>
+        </Rise>
 
         <Rule />
 
-        <Txt
-          size={11.5}
-          weight={700}
-          tracking={0.096}
-          color="#595959"
-          style={{ paddingTop: 24, paddingBottom: 12, paddingHorizontal: 26 }}
-        >
-          {t('shop.business')}
-        </Txt>
+        <Rise index={1}>
+          <Txt
+            size={11.5}
+            weight={700}
+            tracking={0.096}
+            color="#595959"
+            style={{ paddingTop: 24, paddingBottom: 12, paddingHorizontal: 26 }}
+          >
+            {t('shop.business')}
+          </Txt>
+        </Rise>
 
-        {BUSINESS.map((row) => (
-          <SettingsRow key={row.key} row={row} onPress={() => open(row)} />
+        {BUSINESS.map((row, i) => (
+          <SettingsRow key={row.key} row={row} index={2 + i} onPress={() => open(row)} />
         ))}
 
-        <Txt
-          size={14}
-          weight={600}
-          color="#595959"
-          style={{ paddingTop: 24, paddingBottom: 12, paddingHorizontal: 26 }}
-        >
-          {t('shop.analyticsGroup')}
-        </Txt>
+        <Rise index={6}>
+          <Txt
+            size={14}
+            weight={600}
+            color="#595959"
+            style={{ paddingTop: 24, paddingBottom: 12, paddingHorizontal: 26 }}
+          >
+            {t('shop.analyticsGroup')}
+          </Txt>
+        </Rise>
         <SettingsRow
           row={{ key: 'reports', icon: 'chart', label: 'shop.reportsDashboard' }}
+          index={7}
           onPress={() => router.push('/analytics')}
         />
 
@@ -162,64 +184,65 @@ export default function SettingsScreen() {
             Not in the design, which is English-only — but the app ships three
             languages and this screen replaced the one that used to carry the
             switcher. Without it Sinhala and Tamil are unreachable and the whole
-            i18n layer is dead weight. Each label renders in its own script. */}
-        <Txt
-          size={14}
-          weight={600}
-          color="#595959"
-          style={{ paddingTop: 24, paddingBottom: 12, paddingHorizontal: 26 }}
-        >
-          {t('account.preferences')}
-        </Txt>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 14,
-            minHeight: 52,
-            paddingHorizontal: 24,
-            borderBottomWidth: 1,
-            borderBottomColor: '#E6E6E6',
-          }}
-        >
-          <LineIcon name="globe" size={19} color={brand.primary} />
-          <Txt flex={1} size={14} weight={500} color={brand.text}>
-            {t('more.language')}
+            i18n layer is dead weight. */}
+        <Rise index={8}>
+          <Txt
+            size={14}
+            weight={600}
+            color="#595959"
+            style={{ paddingTop: 24, paddingBottom: 12, paddingHorizontal: 26 }}
+          >
+            {t('account.preferences')}
           </Txt>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
-            {(['en', 'si', 'ta'] as Locale[]).map((l) => {
-              const active = l === locale;
-              return (
-                <Tap
-                  key={l}
-                  onPress={() => setLocale(l)}
-                  accessibilityRole="radio"
-                  aria-checked={active}
-                  accessibilityLabel={localeLabels[l]}
-                  style={{
-                    minWidth: 44,
-                    minHeight: 30,
-                    borderRadius: brandRadius.social,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    paddingHorizontal: 10,
-                    backgroundColor: active ? brand.primary : brand.fill,
-                  }}
-                >
-                  <Txt
-                    size={12.5}
-                    weight={600}
-                    script={localeScripts[l]}
-                    color={active ? brand.onPrimary : brand.body}
-                  >
-                    {localeLabels[l]}
-                  </Txt>
-                </Tap>
-              );
-            })}
-          </View>
-        </View>
+        </Rise>
+        <Rise index={9}>
+          <Tap
+            onPress={() => setLangOpen(true)}
+            accessibilityRole="button"
+            accessibilityLabel={t('shop.language')}
+            feedback="highlight"
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 14,
+              minHeight: 52,
+              paddingHorizontal: 24,
+              borderBottomWidth: 1,
+              borderBottomColor: '#E6E6E6',
+            }}
+          >
+            <LineIcon name="globe" size={19} color={brand.primary} />
+            <Txt flex={1} size={14} weight={500} color={brand.text}>
+              {t('shop.language')}
+            </Txt>
+            {/* The current language, in its own script. */}
+            <Txt size={14} weight={600} script={localeScripts[locale]} color={brand.linkAlt}>
+              {LANGUAGE_NAMES[locale]}
+            </Txt>
+            <LineIcon name="chevronRight" size={15} color="#C0C0C0" />
+          </Tap>
+        </Rise>
       </ScrollView>
+
+      <ShopSheet
+        visible={langOpen}
+        onClose={() => setLangOpen(false)}
+        title={t('shop.chooseLanguage')}
+      >
+        {(['en', 'si', 'ta'] as Locale[]).map((l) => (
+          <SheetRow
+            key={l}
+            label={LANGUAGE_NAMES[l]}
+            sub={localeLabels[l]}
+            script={localeScripts[l]}
+            selected={l === locale}
+            onPress={() => {
+              setLocale(l);
+              setLangOpen(false);
+            }}
+          />
+        ))}
+      </ShopSheet>
 
       <Toast visible={!!toast} title={toast ?? ''} bottom={28} />
     </View>
@@ -230,29 +253,31 @@ function Rule() {
   return <View style={{ height: 1, backgroundColor: brand.border }} />;
 }
 
-function SettingsRow({ row, onPress }: { row: Row; onPress: () => void }) {
+function SettingsRow({ row, index, onPress }: { row: Row; index: number; onPress: () => void }) {
   const { t } = useI18n();
   return (
-    <Tap
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={t(row.label)}
-      feedback="highlight"
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 14,
-        minHeight: 52,
-        paddingHorizontal: 24,
-        borderBottomWidth: 1,
-        borderBottomColor: '#E6E6E6',
-      }}
-    >
-      <LineIcon name={row.icon} size={19} color={brand.primary} />
-      <Txt flex={1} size={14} weight={500} color={brand.text}>
-        {t(row.label)}
-      </Txt>
-      <LineIcon name="chevronRight" size={15} color="#C0C0C0" />
-    </Tap>
+    <Rise index={index}>
+      <Tap
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={t(row.label)}
+        feedback="highlight"
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 14,
+          minHeight: 52,
+          paddingHorizontal: 24,
+          borderBottomWidth: 1,
+          borderBottomColor: '#E6E6E6',
+        }}
+      >
+        <LineIcon name={row.icon} size={19} color={brand.primary} />
+        <Txt flex={1} size={14} weight={500} color={brand.text}>
+          {t(row.label)}
+        </Txt>
+        <LineIcon name="chevronRight" size={15} color="#C0C0C0" />
+      </Tap>
+    </Rise>
   );
 }

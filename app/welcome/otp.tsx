@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useRef, useState } from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
+import { Animated, ScrollView, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BrandBar, BrandButton, Gap } from '@/components/brand/BrandKit';
@@ -8,6 +8,7 @@ import { Txt } from '@/components/Txt';
 import { useI18n } from '@/i18n';
 import { familyFor } from '@/theme/fonts';
 import { brand, brandRadius, brandSize, brandType } from '@/theme/brand';
+import { Rise, usePop } from '@/theme/motion';
 
 /**
  * 05 · Verification — one screen, two jobs.
@@ -50,12 +51,14 @@ export default function OtpScreen() {
         keyboardShouldPersistTaps="handled"
       >
         {isReset ? null : (
-          <Txt size={40} align="center" style={{ paddingTop: 52 }}>
-            📱
-          </Txt>
+          <Rise>
+            <Txt size={40} align="center" style={{ paddingTop: 52 }}>
+              📱
+            </Txt>
+          </Rise>
         )}
 
-        <View style={{ paddingTop: 26, alignItems: 'center', paddingHorizontal: 24 }}>
+        <Rise index={1} style={{ paddingTop: 26, alignItems: 'center', paddingHorizontal: 24 }}>
           <Txt
             size={brandType.lead.size}
             weight={brandType.lead.weight}
@@ -73,7 +76,7 @@ export default function OtpScreen() {
           <Txt size={12.5} weight={600} mono align="center" color={brand.text}>
             {t('auth.otpNumber')}
           </Txt>
-        </View>
+        </Rise>
 
         {/* ── The code ─────────────────────────────────────────────────── */}
         <View
@@ -86,37 +89,23 @@ export default function OtpScreen() {
           }}
         >
           {digits.map((digit, i) => (
-            <TextInput
+            <OtpBox
               key={i}
-              ref={(el) => {
+              index={i}
+              value={digit}
+              label={t('auth.otpDigit', { n: i + 1 })}
+              inputRef={(el) => {
                 boxes.current[i] = el;
               }}
-              value={digit}
-              onChangeText={(v) => setDigit(i, v)}
-              onKeyPress={({ nativeEvent }) => {
-                if (nativeEvent.key === 'Backspace' && !digit && i > 0) boxes.current[i - 1]?.focus();
-              }}
-              maxLength={1}
-              keyboardType="number-pad"
-              accessibilityLabel={t('auth.otpDigit', { n: i + 1 })}
-              style={{
-                width: brandSize.otpBox.width,
-                height: brandSize.otpBox.height,
-                borderRadius: brandRadius.otp,
-                backgroundColor: brand.surface,
-                borderWidth: 2,
-                borderColor: digit ? brand.otpFilled : brand.otpEmpty,
-                textAlign: 'center',
-                fontFamily: familyFor('latin', 600, true),
-                fontSize: 24,
-                color: brand.text,
-                padding: 0,
+              onChange={(v) => setDigit(i, v)}
+              onBackspace={() => {
+                if (!digit && i > 0) boxes.current[i - 1]?.focus();
               }}
             />
           ))}
         </View>
 
-        <View style={{ paddingTop: 32, paddingHorizontal: brandSize.gutter }}>
+        <Rise index={8} style={{ paddingTop: 32, paddingHorizontal: brandSize.gutter }}>
           <BrandButton
             pill
             tall
@@ -125,9 +114,10 @@ export default function OtpScreen() {
               isReset ? router.replace('/welcome/sign-in') : router.replace('/welcome/category')
             }
           />
-        </View>
+        </Rise>
 
-        <View
+        <Rise
+          index={9}
           style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
@@ -143,9 +133,10 @@ export default function OtpScreen() {
           <Txt size={12.5} weight={600} align="center" color={brand.resend}>
             {t('auth.resendIn', { time: '0:45' })}
           </Txt>
-        </View>
+        </Rise>
 
-        <View
+        <Rise
+          index={10}
           style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
@@ -161,8 +152,65 @@ export default function OtpScreen() {
           <Txt size={13} weight={600} mono align="center" color={brand.text}>
             9:15
           </Txt>
-        </View>
+        </Rise>
       </ScrollView>
     </View>
+  );
+}
+
+/**
+ * One box of the code.
+ *
+ * The box springs when it takes a digit. Six identical squares with a border
+ * that changes colour give almost no signal that the keystroke landed —
+ * especially on a phone, where the thumb covers the box being typed into.
+ */
+function OtpBox({
+  index,
+  value,
+  label,
+  inputRef,
+  onChange,
+  onBackspace,
+}: {
+  index: number;
+  value: string;
+  label: string;
+  /** Handed the instance so the parent can move focus along the row. */
+  inputRef: (el: TextInput | null) => void;
+  onChange: (next: string) => void;
+  onBackspace: () => void;
+}) {
+  const scale = usePop(value, !!value);
+
+  return (
+    <Rise index={2 + index}>
+      <Animated.View style={{ transform: [{ scale }] }}>
+        <TextInput
+          ref={inputRef}
+          value={value}
+          onChangeText={onChange}
+          onKeyPress={({ nativeEvent }) => {
+            if (nativeEvent.key === 'Backspace') onBackspace();
+          }}
+          maxLength={1}
+          keyboardType="number-pad"
+          accessibilityLabel={label}
+          style={{
+            width: brandSize.otpBox.width,
+            height: brandSize.otpBox.height,
+            borderRadius: brandRadius.otp,
+            backgroundColor: brand.surface,
+            borderWidth: 2,
+            borderColor: value ? brand.otpFilled : brand.otpEmpty,
+            textAlign: 'center',
+            fontFamily: familyFor('latin', 600, true),
+            fontSize: 24,
+            color: brand.text,
+            padding: 0,
+          }}
+        />
+      </Animated.View>
+    </Rise>
   );
 }

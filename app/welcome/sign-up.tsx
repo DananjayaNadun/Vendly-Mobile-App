@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { Animated, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BrandBar, BrandButton, BrandField, Gap } from '@/components/brand/BrandKit';
@@ -8,6 +8,7 @@ import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
 import { useI18n, type TranslationKey } from '@/i18n';
 import { brand, brandSize, brandType } from '@/theme/brand';
+import { Rise, useAnimatedNumber } from '@/theme/motion';
 
 /**
  * 06 · Create account.
@@ -56,7 +57,7 @@ export default function SignUpScreen() {
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={{ paddingTop: 30, paddingHorizontal: 43 }}>
+        <Rise style={{ paddingTop: 30, paddingHorizontal: 43 }}>
           <Txt
             size={brandType.heading.size}
             weight={brandType.heading.weight}
@@ -69,25 +70,27 @@ export default function SignUpScreen() {
           <Txt size={13.5} color="#8D8D8D">
             {t('auth.createSub')}
           </Txt>
-        </View>
+        </Rise>
 
         <View style={{ paddingTop: 24, paddingHorizontal: 36, gap: 20 }}>
-          {FIELDS.map((field) => (
-            <BrandField
-              key={field.key}
-              label={t(field.label)}
-              placeholder={t(field.placeholder)}
-              value={values[field.key] ?? ''}
-              onChange={(next) => setValues((prev) => ({ ...prev, [field.key]: next }))}
-              secure={field.secure}
-              keyboard={field.keyboard}
-              autoComplete={field.autoComplete}
-            />
+          {FIELDS.map((field, i) => (
+            <Rise key={field.key} index={1 + i}>
+              <BrandField
+                label={t(field.label)}
+                placeholder={t(field.placeholder)}
+                value={values[field.key] ?? ''}
+                onChange={(next) => setValues((prev) => ({ ...prev, [field.key]: next }))}
+                secure={field.secure}
+                keyboard={field.keyboard}
+                autoComplete={field.autoComplete}
+              />
+            </Rise>
           ))}
         </View>
 
         {/* ── Consent ──────────────────────────────────────────────────── */}
-        <View
+        <Rise
+          index={7}
           style={{
             flexDirection: 'row',
             alignItems: 'flex-start',
@@ -117,11 +120,7 @@ export default function SignUpScreen() {
               justifyContent: 'center',
             }}
           >
-            {agreed ? (
-              <Txt size={11} weight={700} color={brand.onPrimary}>
-                ✓
-              </Txt>
-            ) : null}
+            <CheckMark on={agreed} />
           </Tap>
 
           <Txt flex={1} size={12.5} leading={1.55} color={brand.text}>
@@ -134,9 +133,9 @@ export default function SignUpScreen() {
               {t('auth.agreePrivacy')}
             </Txt>
           </Txt>
-        </View>
+        </Rise>
 
-        <View style={{ paddingTop: 26, paddingHorizontal: brandSize.gutter }}>
+        <Rise index={8} style={{ paddingTop: 26, paddingHorizontal: brandSize.gutter }}>
           <BrandButton
             pill
             tall
@@ -146,8 +145,26 @@ export default function SignUpScreen() {
             onPress={agreed ? () => router.push('/welcome/otp') : undefined}
             style={agreed ? undefined : { opacity: 0.45 }}
           />
-        </View>
+        </Rise>
       </ScrollView>
     </KeyboardAvoidingView>
+  );
+}
+
+/**
+ * The consent tick.
+ *
+ * Springs in rather than appearing, because the box is 18pt square and its
+ * fill colour changing underneath a glyph that simply blinks on is easy to
+ * miss — and this is the one control on the screen that gates the CTA.
+ */
+function CheckMark({ on }: { on: boolean }) {
+  const anim = useAnimatedNumber(on ? 1 : 0);
+  return (
+    <Animated.View style={{ opacity: anim, transform: [{ scale: anim }] }}>
+      <Txt size={11} weight={700} color={brand.onPrimary}>
+        ✓
+      </Txt>
+    </Animated.View>
   );
 }

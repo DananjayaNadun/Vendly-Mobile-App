@@ -280,6 +280,41 @@ export function useCountUp(target: number, enabled = true): number {
 }
 
 /**
+ * A brief scale bump, replayed whenever `trigger` changes.
+ *
+ * For the small confirmations that have no other affordance: a code box that
+ * has just taken a digit, a stock count that has just been stepped. Nothing
+ * moves on mount — the first render is the resting state, not an event.
+ */
+export function usePop(trigger: unknown, enabled = true) {
+  const scale = useRef(new Animated.Value(1)).current;
+  const settled = useRef(false);
+  const reduced = useReduceMotion();
+
+  useEffect(() => {
+    if (!settled.current) {
+      settled.current = true;
+      return;
+    }
+    if (!enabled || reduced) return;
+
+    const animation = Animated.sequence([
+      Animated.timing(scale, {
+        toValue: 1.08,
+        duration: motion.duration.instant,
+        easing: easeOut,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scale, { toValue: 1, ...motion.spring, useNativeDriver: true }),
+    ]);
+    animation.start();
+    return () => animation.stop();
+  }, [trigger, enabled, reduced, scale]);
+
+  return scale;
+}
+
+/**
  * Grows a bar from zero to `pct` on mount. Used by the analytics chart and the
  * COD reliability meters, where the growth is what makes the comparison legible.
  */
@@ -307,4 +342,75 @@ export function useGrow(pct: number, index = 0) {
     inputRange: [0, 1],
     outputRange: ['0%', `${Math.max(0, Math.min(100, pct))}%`],
   });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Charts
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Draws a stroked path on, and redraws it whenever `key` changes.
+ *
+ * Returns the `strokeDashoffset` to hand an animated `<Path>`: the dash pattern
+ * is the whole line, so offsetting by its length hides it and winding that
+ * offset to zero reveals it left to right.
+ *
+ * The redraw is the point rather than the flourish. Switching period or metric
+ * replaces every value on the chart, and a line that silently swaps shape gives
+ * the eye nothing to follow — redrawing says *this is different data* without a
+ * word of copy.
+ */
+export function useDrawIn(length: number, key: string) {
+  const progress = useRef(new Animated.Value(0)).current;
+  const reduced = useReduceMotion();
+
+  useEffect(() => {
+    if (reduced) {
+      progress.setValue(1);
+      return;
+    }
+    progress.setValue(0);
+    const animation = Animated.timing(progress, {
+      toValue: 1,
+      duration: motion.duration.slow,
+      easing: easeOut,
+      // Drives `strokeDashoffset`, which is not a transform.
+      useNativeDriver: false,
+    });
+    animation.start();
+    return () => animation.stop();
+  }, [progress, reduced, key]);
+
+  return {
+    progress,
+    dashoffset: progress.interpolate({ inputRange: [0, 1], outputRange: [length, 0] }),
+  };
+}
+
+/**
+ * Springs a plain number towards its target.
+ *
+ * For SVG geometry — `cx`, `cy`, `x1` — which the native driver cannot touch
+ * because none of them are transforms. Used for the chart's selected point, so
+ * moving the selection slides rather than teleports.
+ */
+export function useAnimatedNumber(target: number) {
+  const value = useRef(new Animated.Value(target)).current;
+  const reduced = useReduceMotion();
+
+  useEffect(() => {
+    if (reduced) {
+      value.setValue(target);
+      return;
+    }
+    const animation = Animated.spring(value, {
+      toValue: target,
+      ...motion.spring,
+      useNativeDriver: false,
+    });
+    animation.start();
+    return () => animation.stop();
+  }, [target, value, reduced]);
+
+  return value;
 }
