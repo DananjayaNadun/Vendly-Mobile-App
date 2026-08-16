@@ -1,43 +1,24 @@
-import { router } from 'expo-router';
 import Tabs from 'expo-router/js-tabs';
 import React from 'react';
 
-import { TabBar } from '@/components/TabBar';
-import { TabChromeProvider, useTabChrome } from '@/state/TabChrome';
+import { ShopTabBar } from '@/components/brand/ShopTabBar';
 
 /**
- * Four destinations plus the raised Add button.
+ * The six destinations the Vendly.lk design specifies.
  *
- * Analytics was promoted out of the old More drawer and is now `insights`;
- * everything else that drawer held is account-level and lives at `/account`,
- * reached from the shop avatar on Today.
+ * This replaces the previous four-tab shell (Today · Orders · Products ·
+ * Insights) and its raised Add button — neither exists in the new design, which
+ * puts New Order behind a Quick Action on Home instead.
  */
 export default function TabsLayout() {
   return (
-    <TabChromeProvider>
-      <TabsWithChrome />
-    </TabChromeProvider>
-  );
-}
-
-function TabsWithChrome() {
-  // Bulk selection on Orders hides the bar so the mode owns the whole screen.
-  const { tabBarHidden } = useTabChrome();
-
-  return (
-    <Tabs
-      screenOptions={{ headerShown: false }}
-      tabBar={(props) =>
-        tabBarHidden ? null : (
-          // Long-pressing Add opens the intent sheet. See app/add.tsx.
-          <TabBar {...props} onAddLongPress={() => router.push('/add')} />
-        )
-      }
-    >
-      <Tabs.Screen name="index" />
+    <Tabs screenOptions={{ headerShown: false }} tabBar={(props) => <ShopTabBar {...props} />}>
+      <Tabs.Screen name="home" />
       <Tabs.Screen name="orders" />
-      <Tabs.Screen name="products" />
-      <Tabs.Screen name="insights" />
+      <Tabs.Screen name="inventory" />
+      <Tabs.Screen name="couriers" />
+      <Tabs.Screen name="customers" />
+      <Tabs.Screen name="analytics" />
     </Tabs>
   );
 }

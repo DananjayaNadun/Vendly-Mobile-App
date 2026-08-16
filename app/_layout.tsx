@@ -7,37 +7,35 @@ import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { I18nProvider } from '@/i18n';
+import { brand } from '@/theme/brand';
 import { fontAssets } from '@/theme/fonts';
-import { ThemeProvider, useTheme } from '@/theme/ThemeContext';
+import { ThemeProvider } from '@/theme/ThemeContext';
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   /* Already hidden — nothing to do. */
 });
 
 /**
- * Screens live in a plain stack: the tab group is the root entry, and every
- * detail screen pushes over it. Headers are off everywhere because the design
- * draws its own 56px app bar on each screen.
+ * Screens live in a plain stack. The app opens on `welcome`, which runs the
+ * splash, onboarding and authentication flow before handing over to the tab
+ * group. Headers are off everywhere because each screen draws its own.
  */
 function RootStack() {
-  const { c, scheme } = useTheme();
   return (
-    <View style={{ flex: 1, backgroundColor: c.canvas }}>
-      <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+    <View style={{ flex: 1, backgroundColor: brand.canvas }}>
+      <StatusBar style="dark" />
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: c.canvas },
+          contentStyle: { backgroundColor: brand.canvas },
           animation: 'slide_from_right',
         }}
       >
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="new-order" options={{ animation: 'slide_from_bottom' }} />
-        {/* The intent sheet renders its own scrim, so the route is transparent. */}
-        <Stack.Screen
-          name="add"
-          options={{ presentation: 'transparentModal', animation: 'none' }}
-        />
+        <Stack.Screen name="index" options={{ animation: 'fade' }} />
+        <Stack.Screen name="welcome" options={{ animation: 'fade' }} />
+        <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
+        <Stack.Screen name="settings" />
+        <Stack.Screen name="business-profile" />
       </Stack>
     </View>
   );

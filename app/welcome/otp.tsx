@@ -1,0 +1,168 @@
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useRef, useState } from 'react';
+import { ScrollView, TextInput, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { BrandBar, BrandButton, Gap } from '@/components/brand/BrandKit';
+import { Txt } from '@/components/Txt';
+import { useI18n } from '@/i18n';
+import { familyFor } from '@/theme/fonts';
+import { brand, brandRadius, brandSize, brandType } from '@/theme/brand';
+
+/**
+ * 05 · Verification — one screen, two jobs.
+ *
+ * `?mode=reset` is the password-reset code and returns to sign-in; anything else
+ * is the phone verification that follows sign-up and continues to the category
+ * picker. The design draws them as separate frames that differ only in title,
+ * bar colour, the phone glyph and where the two buttons go, so they are one
+ * screen here rather than two near-identical files.
+ */
+const LENGTH = 6;
+
+export default function OtpScreen() {
+  const { t } = useI18n();
+  const insets = useSafeAreaInsets();
+  const { mode } = useLocalSearchParams<{ mode?: string }>();
+  const isReset = mode === 'reset';
+
+  const [digits, setDigits] = useState<string[]>(Array(LENGTH).fill(''));
+  const boxes = useRef<(TextInput | null)[]>([]);
+
+  const setDigit = (index: number, raw: string) => {
+    const value = raw.replace(/[^0-9]/g, '').slice(-1);
+    setDigits((prev) => prev.map((d, i) => (i === index ? value : d)));
+    // Advance on entry, retreat on delete — a six-box code is unusable without it.
+    if (value && index < LENGTH - 1) boxes.current[index + 1]?.focus();
+    if (!value && index > 0) boxes.current[index - 1]?.focus();
+  };
+
+  return (
+    <View style={{ flex: 1, backgroundColor: brand.canvas }}>
+      <BrandBar
+        title={isReset ? t('auth.verificationTitle') : t('auth.verifyTitle')}
+        background={isReset ? brand.canvas : brand.surface}
+        onBack={() => router.back()}
+      />
+
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        {isReset ? null : (
+          <Txt size={40} align="center" style={{ paddingTop: 52 }}>
+            📱
+          </Txt>
+        )}
+
+        <View style={{ paddingTop: 26, alignItems: 'center', paddingHorizontal: 24 }}>
+          <Txt
+            size={brandType.lead.size}
+            weight={brandType.lead.weight}
+            tracking={brandType.lead.tracking}
+            align="center"
+            color={brand.text}
+          >
+            {t('auth.otpHeading')}
+          </Txt>
+          <Gap h={16} />
+          <Txt size={13} align="center" color={brand.faint}>
+            {t('auth.otpSentTo')}
+          </Txt>
+          <Gap h={4} />
+          <Txt size={12.5} weight={600} mono align="center" color={brand.text}>
+            {t('auth.otpNumber')}
+          </Txt>
+        </View>
+
+        {/* ── The code ─────────────────────────────────────────────────── */}
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            gap: 10,
+            paddingTop: 38,
+            paddingHorizontal: 16,
+          }}
+        >
+          {digits.map((digit, i) => (
+            <TextInput
+              key={i}
+              ref={(el) => {
+                boxes.current[i] = el;
+              }}
+              value={digit}
+              onChangeText={(v) => setDigit(i, v)}
+              onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent.key === 'Backspace' && !digit && i > 0) boxes.current[i - 1]?.focus();
+              }}
+              maxLength={1}
+              keyboardType="number-pad"
+              accessibilityLabel={t('auth.otpDigit', { n: i + 1 })}
+              style={{
+                width: brandSize.otpBox.width,
+                height: brandSize.otpBox.height,
+                borderRadius: brandRadius.otp,
+                backgroundColor: brand.surface,
+                borderWidth: 2,
+                borderColor: digit ? brand.otpFilled : brand.otpEmpty,
+                textAlign: 'center',
+                fontFamily: familyFor('latin', 600, true),
+                fontSize: 24,
+                color: brand.text,
+                padding: 0,
+              }}
+            />
+          ))}
+        </View>
+
+        <View style={{ paddingTop: 32, paddingHorizontal: brandSize.gutter }}>
+          <BrandButton
+            pill
+            tall
+            label={t('auth.verifyCode')}
+            onPress={() =>
+              isReset ? router.replace('/welcome/sign-in') : router.replace('/welcome/category')
+            }
+          />
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: 4,
+            paddingTop: 38,
+            paddingHorizontal: 24,
+          }}
+        >
+          <Txt size={12.5} align="center" color="#919191">
+            {t('auth.notReceived')}
+          </Txt>
+          <Txt size={12.5} weight={600} align="center" color={brand.resend}>
+            {t('auth.resendIn', { time: '0:45' })}
+          </Txt>
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: 4,
+            paddingTop: 34,
+            paddingHorizontal: 24,
+          }}
+        >
+          <Txt size={13} align="center" color="#707070">
+            {t('auth.expiresIn')}
+          </Txt>
+          <Txt size={13} weight={600} mono align="center" color={brand.text}>
+            9:15
+          </Txt>
+        </View>
+      </ScrollView>
+    </View>
+  );
+}

@@ -2,37 +2,61 @@ import { router } from 'expo-router';
 import React from 'react';
 import { View } from 'react-native';
 
+import { BrandBar, BrandButton } from '@/components/brand/BrandKit';
+import { Txt } from '@/components/Txt';
+import { LineIcon } from '@/icons/line';
 import { useT } from '@/i18n';
-import { space } from '@/theme/tokens';
-import { useTheme } from '@/theme/ThemeContext';
-import { AppBar, TopChrome } from './AppBar';
-import { Button, EmptyState } from './ui';
+import { brand, brandSize } from '@/theme/brand';
 
 /**
  * Shown when a route names a record that does not exist.
  *
  * Detail screens used to fall back to the first item in the list instead, which
- * meant a stale link quietly showed a *different customer's* order — the worst
- * possible failure on a screen whose whole job is deciding whether to trust one
- * specific person with cash. Being unable to find it is the honest answer.
+ * meant a stale link quietly showed a *different customer's* order. Being unable
+ * to find it is the honest answer.
  */
 export function NotFound({ title, message }: { title: string; message: string }) {
-  const { c } = useTheme();
   const t = useT();
 
   return (
-    <View style={{ flex: 1, backgroundColor: c.canvas }}>
-      <TopChrome>
-        <AppBar title={title} onLeading={() => router.back()} />
-      </TopChrome>
+    <View style={{ flex: 1, backgroundColor: brand.canvas }}>
+      <BrandBar title={title} onBack={() => router.back()} />
 
-      <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: space.s5 }}>
-        <EmptyState icon="search" title={title} body={message} />
-        <Button
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingHorizontal: brandSize.gutter,
+          gap: 16,
+        }}
+      >
+        <View
+          style={{
+            width: 64,
+            height: 64,
+            borderRadius: 20,
+            backgroundColor: brand.fill,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <LineIcon name="search" size={28} color={brand.muted} />
+        </View>
+
+        <Txt size={19} weight={600} align="center" color={brand.text}>
+          {title}
+        </Txt>
+        <Txt size={13.5} leading={1.55} align="center" color={brand.body}>
+          {message}
+        </Txt>
+
+        <BrandButton
+          pill
+          variant="outline"
           label={t('common.back')}
-          variant="secondary"
           onPress={() => router.back()}
-          style={{ marginHorizontal: space.s5 }}
+          style={{ alignSelf: 'stretch', marginTop: 8 }}
         />
       </View>
     </View>
