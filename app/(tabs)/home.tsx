@@ -1,9 +1,9 @@
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ShopCard, StatTile } from '@/components/brand/ShopKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { ShopSheet } from '@/components/brand/ShopSheet';
 import { Toast } from '@/components/Overlays';
 import { Txt } from '@/components/Txt';
@@ -46,7 +46,6 @@ const ACTIONS: { key: string; icon: LineIconName; label: TranslationKey; href?: 
 
 export default function HomeScreen() {
   const { t } = useI18n();
-  const insets = useSafeAreaInsets();
   const [bellOpen, setBellOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const revenue = useCountUp(shop.revenueToday);
@@ -60,73 +59,59 @@ export default function HomeScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: brand.canvas }}>
       <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
-        {/* ── Greeting + revenue ───────────────────────────────────────── */}
-        <View
-          style={{
-            backgroundColor: brand.surface,
-            paddingTop: insets.top + 14,
-            paddingHorizontal: 24,
-            paddingBottom: 26,
-          }}
-        >
-          <Rise style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 14 }}>
-            <View style={{ flex: 1 }}>
-              <Txt size={14} weight={500} color="#434343">
-                {t(shop.greetingKey)} 👋
-              </Txt>
-              <View style={{ height: 9 }} />
-              <Txt size={20} weight={700} tracking={-0.02} color={brand.text}>
-                {shop.name}
-              </Txt>
+        {/* ── Greeting + revenue ─────────────────────────────────────────
+            The revenue card rides in the nav's `below` slot rather than
+            sitting on the canvas: it is the shop's headline, not the first
+            item of the list under it. */}
+        <ShopNav
+          eyebrow={t(shop.greetingKey)}
+          eyebrowIcon="hand"
+          title={shop.name}
+          actions={[
+            {
+              key: 'bell',
+              icon: 'bell',
+              label: t('notif.title'),
+              onPress: () => setBellOpen(true),
+            },
+            {
+              key: 'account',
+              icon: 'avatar',
+              label: t('shop.settings'),
+              onPress: () => router.push('/settings'),
+            },
+          ]}
+          below={
+            <View style={{ paddingHorizontal: 20, paddingTop: 8 }}>
+              <Tap
+                onPress={() => router.push('/analytics')}
+                accessibilityRole="button"
+                accessibilityLabel={t('shop.todayRevenue')}
+                style={{
+                  backgroundColor: brand.primary,
+                  borderRadius: brandRadius.ctaTall,
+                  paddingVertical: 18,
+                  paddingHorizontal: 20,
+                }}
+              >
+                <Txt size={11} weight={700} tracking={0.11} color="#E9E9E9">
+                  {t('shop.todayRevenue')}
+                </Txt>
+                <View style={{ height: 8 }} />
+                <Txt size={27} weight={700} tracking={-0.02} color={brand.onPrimary}>
+                  LKR {revenue.toLocaleString('en-US')}
+                </Txt>
+                <View style={{ height: 8 }} />
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                  <LineIcon name="arrowUp" size={14} color="#D9D9D9" strokeWidth={2.4} />
+                  <Txt size={13} weight={500} color="#D9D9D9">
+                    {t('shop.revenueDelta', { pct: shop.revenueDeltaPct })}
+                  </Txt>
+                </View>
+              </Tap>
             </View>
-            <Tap
-              onPress={() => setBellOpen(true)}
-              accessibilityRole="button"
-              accessibilityLabel={t('notif.title')}
-              hitSlop={10}
-              style={{ padding: 2 }}
-            >
-              <LineIcon name="bell" size={22} color={brand.text} />
-            </Tap>
-            <Tap
-              onPress={() => router.push('/settings')}
-              accessibilityRole="button"
-              accessibilityLabel={t('shop.settings')}
-              hitSlop={10}
-              style={{ padding: 2 }}
-            >
-              <LineIcon name="avatar" size={22} color={brand.text} />
-            </Tap>
-          </Rise>
-
-          <View style={{ height: 24 }} />
-
-          <Rise index={1}>
-            <Tap
-              onPress={() => router.push('/analytics')}
-              accessibilityRole="button"
-              accessibilityLabel={t('shop.todayRevenue')}
-              style={{
-                backgroundColor: brand.primary,
-                borderRadius: brandRadius.ctaTall,
-                paddingVertical: 18,
-                paddingHorizontal: 20,
-              }}
-            >
-              <Txt size={11} weight={700} tracking={0.11} color="#E9E9E9">
-                {t('shop.todayRevenue')}
-              </Txt>
-              <View style={{ height: 8 }} />
-              <Txt size={27} weight={700} tracking={-0.02} color={brand.onPrimary}>
-                LKR {revenue.toLocaleString('en-US')}
-              </Txt>
-              <View style={{ height: 8 }} />
-              <Txt size={13} weight={500} color="#D9D9D9">
-                {t('shop.revenueDelta', { pct: shop.revenueDeltaPct })}
-              </Txt>
-            </Tap>
-          </Rise>
-        </View>
+          }
+        />
 
         {/* ── The four counters ────────────────────────────────────────── */}
         <View style={{ paddingHorizontal: 20, paddingTop: 22, gap: 14 }}>
@@ -148,6 +133,7 @@ export default function HomeScreen() {
                         label={t(stat.label)}
                         value={stat.value}
                         delta={t(stat.delta.key, stat.delta.vars)}
+                        deltaDirection={stat.direction}
                         icon={art.icon}
                         iconTone={art.tone}
                         iconColor={art.color}

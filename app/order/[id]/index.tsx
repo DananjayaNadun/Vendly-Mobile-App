@@ -2,8 +2,8 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 
-import { BrandBar } from '@/components/brand/BrandKit';
 import { ShopAvatar, ShopCard, ShopChip } from '@/components/brand/ShopKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { NotFound } from '@/components/NotFound';
 import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
@@ -33,13 +33,12 @@ export default function OrderDetailScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: brand.canvas }}>
-      <BrandBar
+      <ShopNav
         title={t('shop.order', { id: order.id })}
-        onBack={() => router.back()}
+        subtitle={order.name}
+        onBack
         trailing={
-          <View style={{ paddingRight: 8 }}>
-            <ShopChip label={t(STATUS_LABEL[order.status])} tone={STATUS_CHIP[order.status]} />
-          </View>
+          <ShopChip label={t(STATUS_LABEL[order.status])} tone={STATUS_CHIP[order.status]} />
         }
       />
 

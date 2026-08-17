@@ -8,7 +8,7 @@ import { BrandButton, BrandLink, Gap } from '@/components/brand/BrandKit';
 import { Txt } from '@/components/Txt';
 import { LineIcon, type LineIconName } from '@/icons/line';
 import { useI18n, type TranslationKey } from '@/i18n';
-import { brand, brandRadius, brandSize, brandType } from '@/theme/brand';
+import { brand, brandRadius, brandSize } from '@/theme/brand';
 import { Rise } from '@/theme/motion';
 
 /**

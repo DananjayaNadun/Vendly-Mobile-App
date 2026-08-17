@@ -1,8 +1,8 @@
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { ShopNav } from '@/components/brand/ShopNav';
 import { SheetRow, ShopSheet } from '@/components/brand/ShopSheet';
 import { Toast } from '@/components/Overlays';
 import { Txt } from '@/components/Txt';
@@ -51,7 +51,6 @@ const BUSINESS: Row[] = [
 
 export default function SettingsScreen() {
   const { t, locale, setLocale } = useI18n();
-  const insets = useSafeAreaInsets();
   const [toast, setToast] = useState<string | null>(null);
   const [langOpen, setLangOpen] = useState(false);
 
@@ -68,19 +67,11 @@ export default function SettingsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: brand.canvas }}>
+      {/* Reached from the avatar on Home, and outside the tab group — so
+          without a back control this screen was a dead end. */}
+      <ShopNav large title={t('shop.settings')} onBack />
+
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-        <Txt
-          size={25}
-          weight={700}
-          tracking={-0.028}
-          color={brand.text}
-          style={{ paddingTop: insets.top + 14, paddingHorizontal: 20, paddingBottom: 18 }}
-        >
-          {t('shop.settings')}
-        </Txt>
-
-        <Rule />
-
         {/* ── Identity ─────────────────────────────────────────────────── */}
         <Rise
           style={{

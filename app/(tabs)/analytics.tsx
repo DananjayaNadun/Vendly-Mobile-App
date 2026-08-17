@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Animated, ScrollView, View } from 'react-native';
 
-import { ShopCard, ShopHeader, StatTile } from '@/components/brand/ShopKit';
+import { ShopCard, StatTile } from '@/components/brand/ShopKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { TrendChart, TrendReadout } from '@/components/brand/TrendChart';
 import { Toast } from '@/components/Overlays';
 import { Txt } from '@/components/Txt';
@@ -101,13 +102,20 @@ export default function AnalyticsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: brand.canvas }}>
-      <ShopHeader title={t('tab.analytics')} action={t('shop.shareReport')} onAction={share} />
-
-      {/* ── Period ─────────────────────────────────────────────────────────
-          Replaces the design's search field, which had nothing to search. */}
-      <View style={{ paddingHorizontal: 20, paddingBottom: 4 }}>
-        <PeriodPicker period={period} onChange={setPeriod} />
-      </View>
+      <ShopNav
+        large
+        title={t('tab.analytics')}
+        actions={[
+          { key: 'share', icon: 'share', label: t('shop.shareReport'), onPress: share },
+        ]}
+        below={
+          // The period selector replaces the design's search field, which had
+          // nothing to search.
+          <View style={{ paddingHorizontal: 20 }}>
+            <PeriodPicker period={period} onChange={setPeriod} />
+          </View>
+        }
+      />
 
       <ScrollView contentContainerStyle={{ padding: 20, gap: 16, paddingBottom: 32 }}>
         {/* ── Headline figures ────────────────────────────────────────── */}
@@ -118,6 +126,7 @@ export default function AnalyticsScreen() {
             label={t('shop.revenue')}
             value={money(view.revenue)}
             delta={signed(view.revenueDelta)}
+            deltaDirection={direction(view.revenueDelta)}
             icon="bag"
             valueSize={20}
             valueColor="#413F3F"
@@ -128,6 +137,7 @@ export default function AnalyticsScreen() {
             label={t('shop.totalOrders')}
             value={String(view.orders)}
             delta={signed(view.ordersDelta)}
+            deltaDirection={direction(view.ordersDelta)}
             icon="orders"
             valueSize={26}
             valueColor="#413F3F"
@@ -199,10 +209,15 @@ export default function AnalyticsScreen() {
   );
 }
 
-/** `18` → `↑ 18%`, `-4` → `↓ 4%`. The arrow carries the sign for colour-blind readers. */
+/** `-4` → `4%`. The direction rides alongside as a drawn arrow, not a glyph. */
 function signed(pct: number): string {
-  if (pct === 0) return '0%';
-  return `${pct > 0 ? '↑' : '↓'} ${Math.abs(pct)}%`;
+  return `${Math.abs(pct)}%`;
+}
+
+/** No arrow at all on a flat period — an arrow that points nowhere is noise. */
+function direction(pct: number): 'up' | 'down' | undefined {
+  if (pct === 0) return undefined;
+  return pct > 0 ? 'up' : 'down';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

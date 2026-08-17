@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Animated, ScrollView, View } from 'react-native';
 
-import { ShopCard, ShopChip, ShopHeader, ShopSearch } from '@/components/brand/ShopKit';
+import { ShopCard, ShopChip, ShopSearch } from '@/components/brand/ShopKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { ShopSheet } from '@/components/brand/ShopSheet';
 import { BrandButton } from '@/components/brand/BrandKit';
 import { Toast } from '@/components/Overlays';
@@ -60,11 +61,17 @@ export default function InventoryScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: brand.canvas }}>
-      <ShopHeader title={t('tab.inventory')} action={t('shop.add')} onAction={() => setAddOpen(true)} />
-
-      <View style={{ paddingHorizontal: 16 }}>
-        <ShopSearch value={query} onChange={setQuery} placeholder={t('shop.searchProducts')} />
-      </View>
+      <ShopNav
+        large
+        title={t('tab.inventory')}
+        cta={t('shop.add')}
+        onCta={() => setAddOpen(true)}
+        below={
+          <View style={{ paddingHorizontal: 16 }}>
+            <ShopSearch value={query} onChange={setQuery} placeholder={t('shop.searchProducts')} />
+          </View>
+        }
+      />
 
       <ScrollView
         contentContainerStyle={{ padding: 20, gap: 14, paddingBottom: 32 }}

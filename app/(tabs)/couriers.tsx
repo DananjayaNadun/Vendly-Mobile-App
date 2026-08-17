@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { BrandButton } from '@/components/brand/BrandKit';
-import { ShopCard, ShopChip, ShopHeader, ShopSearch, StatTile } from '@/components/brand/ShopKit';
+import { ShopCard, ShopChip, ShopSearch, StatTile } from '@/components/brand/ShopKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { SheetRow, ShopSheet } from '@/components/brand/ShopSheet';
 import { Toast } from '@/components/Overlays';
 import { Txt } from '@/components/Txt';
@@ -76,15 +77,17 @@ export default function CouriersScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: brand.canvas }}>
-      <ShopHeader
+      <ShopNav
+        large
         title={t('shop.couriersTitle')}
-        action={t('shop.add')}
-        onAction={() => setConnectOpen(true)}
+        cta={t('shop.add')}
+        onCta={() => setConnectOpen(true)}
+        below={
+          <View style={{ paddingHorizontal: 16 }}>
+            <ShopSearch value={query} onChange={setQuery} placeholder={t('shop.search')} />
+          </View>
+        }
       />
-
-      <View style={{ paddingHorizontal: 16 }}>
-        <ShopSearch value={query} onChange={setQuery} placeholder={t('shop.search')} />
-      </View>
 
       <ScrollView contentContainerStyle={{ padding: 20, gap: 16, paddingBottom: 32 }}>
         <Rise style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>

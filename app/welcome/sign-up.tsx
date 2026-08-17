@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import { Animated, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { BrandBar, BrandButton, BrandField, Gap } from '@/components/brand/BrandKit';
+import { BrandButton, BrandField, Gap } from '@/components/brand/BrandKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { Txt } from '@/components/Txt';
+import { LineIcon } from '@/icons/line';
 import { Tap } from '@/components/ui';
 import { useI18n, type TranslationKey } from '@/i18n';
 import { brand, brandSize, brandType } from '@/theme/brand';
@@ -46,12 +48,7 @@ export default function SignUpScreen() {
       style={{ flex: 1, backgroundColor: brand.canvas }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <BrandBar
-        title={t('auth.createTitle')}
-        background={brand.surface}
-        borderColor="#EDEDED"
-        borderWidth={2}
-      />
+      <ShopNav title={t('auth.createTitle')} onBack />
 
       <ScrollView
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
@@ -162,9 +159,7 @@ function CheckMark({ on }: { on: boolean }) {
   const anim = useAnimatedNumber(on ? 1 : 0);
   return (
     <Animated.View style={{ opacity: anim, transform: [{ scale: anim }] }}>
-      <Txt size={11} weight={700} color={brand.onPrimary}>
-        ✓
-      </Txt>
+      <LineIcon name="check" size={11} color={brand.onPrimary} strokeWidth={3} />
     </Animated.View>
   );
 }

@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { BrandBar, BrandButton, BrandField, BrandLink, Gap } from '@/components/brand/BrandKit';
+import { BrandButton, BrandField, BrandLink, Gap } from '@/components/brand/BrandKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { Txt } from '@/components/Txt';
+import { LineIcon } from '@/icons/line';
 import { useI18n } from '@/i18n';
 import { brand, brandRadius, brandSize } from '@/theme/brand';
 import { Rise } from '@/theme/motion';
@@ -25,7 +27,7 @@ export default function ForgotPasswordScreen() {
       style={{ flex: 1, backgroundColor: brand.canvas }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <BrandBar title={t('auth.resetTitle')} />
+      <ShopNav title={t('auth.resetTitle')} tone="canvas" onBack />
 
       <ScrollView
         contentContainerStyle={{
@@ -45,7 +47,18 @@ export default function ForgotPasswordScreen() {
             alignItems: 'flex-start',
           }}
         >
-          <Txt size={32}>🔐</Txt>
+          <View
+            style={{
+              width: 46,
+              height: 46,
+              borderRadius: 14,
+              backgroundColor: brand.surface,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <LineIcon name="lock" size={24} color={brand.primary} />
+          </View>
           <View style={{ flex: 1 }}>
             <Txt size={16} weight={600} tracking={-0.012} color={brand.text}>
               {t('auth.resetHeading')}

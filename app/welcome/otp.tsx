@@ -3,8 +3,10 @@ import React, { useRef, useState } from 'react';
 import { Animated, ScrollView, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { BrandBar, BrandButton, Gap } from '@/components/brand/BrandKit';
+import { BrandButton, Gap } from '@/components/brand/BrandKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { Txt } from '@/components/Txt';
+import { LineIcon } from '@/icons/line';
 import { useI18n } from '@/i18n';
 import { familyFor } from '@/theme/fonts';
 import { brand, brandRadius, brandSize, brandType } from '@/theme/brand';
@@ -40,10 +42,10 @@ export default function OtpScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: brand.canvas }}>
-      <BrandBar
+      <ShopNav
         title={isReset ? t('auth.verificationTitle') : t('auth.verifyTitle')}
-        background={isReset ? brand.canvas : brand.surface}
-        onBack={() => router.back()}
+        tone={isReset ? 'canvas' : 'surface'}
+        onBack
       />
 
       <ScrollView
@@ -51,10 +53,19 @@ export default function OtpScreen() {
         keyboardShouldPersistTaps="handled"
       >
         {isReset ? null : (
-          <Rise>
-            <Txt size={40} align="center" style={{ paddingTop: 52 }}>
-              📱
-            </Txt>
+          <Rise style={{ alignItems: 'center', paddingTop: 46 }}>
+            <View
+              style={{
+                width: 62,
+                height: 62,
+                borderRadius: 20,
+                backgroundColor: brand.iconTile,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <LineIcon name="mobile" size={30} color={brand.primary} />
+            </View>
           </Rise>
         )}
 
@@ -146,6 +157,7 @@ export default function OtpScreen() {
             paddingHorizontal: 24,
           }}
         >
+          <LineIcon name="lock" size={14} color="#707070" />
           <Txt size={13} align="center" color="#707070">
             {t('auth.expiresIn')}
           </Txt>

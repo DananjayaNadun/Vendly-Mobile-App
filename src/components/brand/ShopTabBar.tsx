@@ -8,18 +8,24 @@ import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
 import { LineIcon, type LineIconName } from '@/icons/line';
 import { useT, type TranslationKey } from '@/i18n';
-import { useReduceMotion } from '@/theme/motion';
-import { brand, brandSize } from '@/theme/brand';
+import { useAnimatedNumber, useReduceMotion } from '@/theme/motion';
+import { brand, brandRadius, brandSize } from '@/theme/brand';
 
 /**
  * The six-destination tab bar.
  *
  * A gradient rather than a flat fill: sampling the exported PDF gives `#005299`
- * at the top of the bar and `#043865` at its foot. Icons are the stroke set,
- * not the emoji the HTML prototype falls back to.
+ * at the top of the bar and `#043865` at its foot.
  *
- * The inactive state is carried by opacity, as the design does — but never
- * below 0.62, so the labels stay legible against the blue.
+ * The active destination is carried by a pill that slides between the six
+ * slots, not by the icon's brightness alone. Six labels in white-on-blue at
+ * 9.5pt is a row of near-identical marks, and "which one am I on" was answered
+ * by an opacity difference of 0.38 — legible if you compare two of them side by
+ * side, and invisible at a glance. The pill also gives the movement between
+ * destinations a direction, which is the thing a tab bar is for.
+ *
+ * Its position is a percentage of the row, so it is correct on the first frame:
+ * nothing here waits on an `onLayout` to know where it belongs.
  */
 
 type Tab = { name: string; icon: LineIconName; labelKey: TranslationKey };
@@ -33,11 +39,17 @@ const TABS: Tab[] = [
   { name: 'analytics', icon: 'chart', labelKey: 'tab.analytics' },
 ];
 
+/** Inset of the sliding pill from the row it travels along. */
+const PILL_INSET = 5;
+
 export function ShopTabBar({ state, navigation }: BottomTabBarProps) {
-  const t = useT();
   const insets = useSafeAreaInsets();
   const id = `tabgrad-${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
   const active = state.routes[state.index]?.name;
+
+  const index = TABS.findIndex((tab) => tab.name === active);
+  const slide = useAnimatedNumber(Math.max(index, 0));
+  const count = TABS.length;
 
   return (
     <View style={{ height: brandSize.tabBar + insets.bottom }}>
@@ -51,7 +63,57 @@ export function ShopTabBar({ state, navigation }: BottomTabBarProps) {
         <Rect x={0} y={0} width="100%" height="100%" fill={`url(#${id})`} />
       </Svg>
 
+      {/* A single hairline of the hero's bright blue, so the bar reads as a
+          surface the content scrolls under rather than a block beneath it. */}
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 1,
+          backgroundColor: 'rgba(51,198,255,0.34)',
+        }}
+      />
+
       <View style={{ flexDirection: 'row', height: brandSize.tabBar }}>
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            top: PILL_INSET,
+            left: 0,
+            right: 0,
+            bottom: PILL_INSET,
+          }}
+        >
+          <Animated.View
+            style={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              width: `${100 / count}%`,
+              left: slide.interpolate({
+                inputRange: [0, count - 1],
+                outputRange: ['0%', `${(100 * (count - 1)) / count}%`],
+              }),
+            }}
+          >
+            {/* The inset is on a child, not on this box. A margin here would
+                push the last slot past the right edge of the bar — a 4px
+                overflow that gives the whole document a horizontal scrollbar
+                the moment Analytics is the active tab. */}
+            <View
+              style={{
+                flex: 1,
+                marginHorizontal: 4,
+                borderRadius: brandRadius.card,
+                backgroundColor: 'rgba(255,255,255,0.16)',
+              }}
+            />
+          </Animated.View>
+        </View>
+
         {TABS.map((tab) => (
           <TabItem
             key={tab.name}
@@ -127,7 +189,13 @@ function TabItem({
       <Animated.View
         style={{ opacity: progress.interpolate({ inputRange: [0, 1], outputRange: [0.62, 1] }) }}
       >
-        <Txt size={9.5} weight={600} align="center" color="#FFFFFF">
+        <Txt
+          size={9.5}
+          weight={focused ? 700 : 600}
+          align="center"
+          numberOfLines={1}
+          color="#FFFFFF"
+        >
           {t(tab.labelKey)}
         </Txt>
       </Animated.View>

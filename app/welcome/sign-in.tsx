@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { BrandButton, BrandField, BrandLink, Gap } from '@/components/brand/BrandKit';
+import { BrandButton, BrandField, BrandLink } from '@/components/brand/BrandKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { SocialRow } from '@/components/brand/Social';
+import { LineIcon } from '@/icons/line';
 import { Toast } from '@/components/Overlays';
 import { Txt } from '@/components/Txt';
 import { useI18n } from '@/i18n';
@@ -40,22 +42,21 @@ export default function SignInScreen() {
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
         keyboardShouldPersistTaps="handled"
       >
-        <Rise
-          style={{
-            backgroundColor: brand.primary,
-            paddingTop: insets.top + 30,
-            paddingBottom: 30,
-            paddingHorizontal: 32,
-          }}
-        >
-          <Txt size={30} weight={700} tracking={-0.02} color={brand.onPrimary}>
-            {t('auth.welcomeBack')}
-          </Txt>
-          <Gap h={8} />
-          <Txt size={13.5} color={brand.onPrimaryMuted}>
-            {t('auth.signInSub')}
-          </Txt>
-        </Rise>
+        {/* The one nav in the app that is not a bar over content — the blue
+            band *is* the top of this page. Same component, `primary` tone. */}
+        <ShopNav
+          tone="primary"
+          titleSize={29}
+          onBack
+          title={t('auth.welcomeBack')}
+          trailing={
+            <View style={{ opacity: 0.9 }}>
+              <LineIcon name="hand" size={30} color={brand.onPrimary} strokeWidth={1.6} />
+            </View>
+          }
+          subtitle={t('auth.signInSub')}
+          style={{ paddingBottom: 18 }}
+        />
 
         <Rise
           index={1}

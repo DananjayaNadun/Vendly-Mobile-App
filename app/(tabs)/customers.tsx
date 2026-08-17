@@ -1,9 +1,9 @@
 import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ShopAvatar, ShopCard, ShopChip, ShopSearch, StatTile } from '@/components/brand/ShopKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { ShopSheet, SheetRow } from '@/components/brand/ShopSheet';
 import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
@@ -25,7 +25,6 @@ import { Rise } from '@/theme/motion';
  */
 export default function CustomersScreen() {
   const { t } = useI18n();
-  const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<ShopCustomer | null>(null);
 
@@ -41,50 +40,42 @@ export default function CustomersScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: brand.canvas }}>
-      <View
-        style={{
-          backgroundColor: brand.surface,
-          borderBottomWidth: 1,
-          borderBottomColor: brand.border,
-          paddingTop: insets.top + 14,
-          paddingBottom: 20,
-        }}
-      >
-        <Txt
-          size={20}
-          weight={700}
-          tracking={-0.02}
-          color={brand.text}
-          style={{ paddingHorizontal: 20 }}
-        >
-          {t('customers.title')}
-        </Txt>
-        <View style={{ height: 18 }} />
-        <View style={{ paddingHorizontal: 16 }}>
-          <ShopSearch value={query} onChange={setQuery} placeholder={t('shop.searchCustomers')} />
-        </View>
-        <View style={{ height: 16 }} />
-        <Rise style={{ flexDirection: 'row', gap: 14, paddingHorizontal: 20 }}>
-          <StatTile
-            countUp
-            label={t('shop.total')}
-            value={String(customerStats.total)}
-            icon="users"
-            valueColor="#4C00FF"
-            valueSize={29}
-          />
-          <StatTile
-            countUp
-            label={t('shop.repeatBuyers')}
-            value={String(customerStats.repeat)}
-            delta={`${customerStats.repeatPct}%`}
-            icon="trend"
-            iconTone="#E4F8F5"
-            iconColor="#008F83"
-            valueSize={29}
-          />
-        </Rise>
-      </View>
+      <ShopNav
+        large
+        title={t('customers.title')}
+        below={
+          <>
+            <View style={{ paddingHorizontal: 16 }}>
+              <ShopSearch
+                value={query}
+                onChange={setQuery}
+                placeholder={t('shop.searchCustomers')}
+              />
+            </View>
+            <View style={{ height: 16 }} />
+            <Rise style={{ flexDirection: 'row', gap: 14, paddingHorizontal: 20 }}>
+              <StatTile
+                countUp
+                label={t('shop.total')}
+                value={String(customerStats.total)}
+                icon="users"
+                valueColor="#4C00FF"
+                valueSize={29}
+              />
+              <StatTile
+                countUp
+                label={t('shop.repeatBuyers')}
+                value={String(customerStats.repeat)}
+                delta={`${customerStats.repeatPct}%`}
+                icon="trend"
+                iconTone="#E4F8F5"
+                iconColor="#008F83"
+                valueSize={29}
+              />
+            </Rise>
+          </>
+        }
+      />
 
       <ScrollView
         contentContainerStyle={{ padding: 20, gap: 14, paddingBottom: 32 }}

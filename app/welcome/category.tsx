@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BrandButton, Gap } from '@/components/brand/BrandKit';
 import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
+import { LineIcon, type LineIconName } from '@/icons/line';
 import { useI18n, type TranslationKey } from '@/i18n';
 import { brand, brandRadius, brandSize, brandType } from '@/theme/brand';
 import { Rise, useAnimatedNumber } from '@/theme/motion';
@@ -21,15 +22,20 @@ import { Rise, useAnimatedNumber } from '@/theme/motion';
  * borders swapping colour at the same instant.
  */
 
-type Category = { key: string; emoji: string; title: TranslationKey; sub: TranslationKey };
+type Category = {
+  key: string;
+  icon: LineIconName;
+  title: TranslationKey;
+  sub: TranslationKey;
+};
 
 const CATEGORIES: Category[] = [
-  { key: 'clothing', emoji: '👗', title: 'cat.clothing', sub: 'cat.clothingSub' },
-  { key: 'food', emoji: '🍔', title: 'cat.food', sub: 'cat.foodSub' },
-  { key: 'beauty', emoji: '💄', title: 'cat.beauty', sub: 'cat.beautySub' },
-  { key: 'electronics', emoji: '📱', title: 'cat.electronics', sub: 'cat.electronicsSub' },
-  { key: 'home', emoji: '🏠', title: 'cat.home', sub: 'cat.homeSub' },
-  { key: 'retail', emoji: '🛒', title: 'cat.retail', sub: 'cat.retailSub' },
+  { key: 'clothing', icon: 'shirt', title: 'cat.clothing', sub: 'cat.clothingSub' },
+  { key: 'food', icon: 'cup', title: 'cat.food', sub: 'cat.foodSub' },
+  { key: 'beauty', icon: 'sparkle', title: 'cat.beauty', sub: 'cat.beautySub' },
+  { key: 'electronics', icon: 'mobile', title: 'cat.electronics', sub: 'cat.electronicsSub' },
+  { key: 'home', icon: 'lamp', title: 'cat.home', sub: 'cat.homeSub' },
+  { key: 'retail', icon: 'cart', title: 'cat.retail', sub: 'cat.retailSub' },
 ];
 
 export default function CategoryScreen() {
@@ -57,7 +63,7 @@ export default function CategoryScreen() {
             >
               {t('auth.categoryTitle')}
             </Txt>
-            <Txt size={22}>🏪</Txt>
+            <LineIcon name="store" size={26} color={brand.primary} />
           </View>
           <Gap h={16} />
           <Txt size={13.5} leading={1.55} color="#626262" style={{ maxWidth: 260 }}>
@@ -90,6 +96,7 @@ export default function CategoryScreen() {
           raised
           pill
           tall
+          icon="arrowRight"
           label={t('auth.continue')}
           onPress={() => router.replace('/home')}
         />
@@ -156,7 +163,24 @@ function CategoryCard({
             opacity: ring,
           }}
         />
-        <Txt size={22}>{category.emoji}</Txt>
+        {/* A tinted square, so a one-colour stroke still reads as the
+            tile's subject the way a flat emoji did. */}
+        <View
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 12,
+            backgroundColor: active ? brand.iconTile : brand.fill,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <LineIcon
+            name={category.icon}
+            size={22}
+            color={active ? brand.primary : brand.body}
+          />
+        </View>
         <View style={{ flex: 1, gap: 4 }}>
           <Txt
             size={brandType.cardTitle.size}

@@ -10,8 +10,8 @@ import { brand } from '@/theme/brand';
  * already worked has changed route. To gate the app behind this flow, point the
  * root stack's first screen at `welcome` in `app/_layout.tsx`.
  *
- * Headers are off because each screen draws its own — a black hero, a blue
- * header, or the rounded back chip from `BrandBar`.
+ * Headers are off because these screens draw their own: the gradient hero on
+ * splash and onboarding, and `ShopNav` on everything after them.
  */
 export default function WelcomeLayout() {
   return (

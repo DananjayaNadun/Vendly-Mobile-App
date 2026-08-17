@@ -1,9 +1,9 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ShopAvatar, ShopCard, ShopChip, ShopSearch } from '@/components/brand/ShopKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
 import {
@@ -32,7 +32,6 @@ import { Rise } from '@/theme/motion';
  */
 export default function OrdersScreen() {
   const { t } = useI18n();
-  const insets = useSafeAreaInsets();
   // `?tab=` preselects a status (the counters on Home) and `?q=` a search term
   // (a customer's row), so both land here already filtered.
   const params = useLocalSearchParams<{ tab?: string; q?: string }>();
@@ -52,58 +51,50 @@ export default function OrdersScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: brand.canvas }}>
-      <View
-        style={{
-          backgroundColor: brand.surface,
-          borderBottomWidth: 1,
-          borderBottomColor: brand.border,
-          paddingTop: insets.top + 14,
-        }}
-      >
-        <Txt
-          size={20}
-          weight={700}
-          tracking={-0.02}
-          color={brand.text}
-          style={{ paddingHorizontal: 20 }}
-        >
-          {t('orders.title')}
-        </Txt>
-        <View style={{ height: 18 }} />
-        <View style={{ paddingHorizontal: 16 }}>
-          <ShopSearch value={query} onChange={setQuery} placeholder={t('shop.searchOrders')} />
-        </View>
-        <View style={{ height: 18 }} />
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 20, gap: 22 }}
-        >
-          {ORDER_TABS.map((key) => {
-            const active = key === tab;
-            return (
-              <Tap
-                key={key}
-                onPress={() => setTab(key)}
-                accessibilityRole="tab"
-                aria-selected={active}
-                accessibilityLabel={t(TAB_LABEL[key])}
-                feedback="opacity"
-                style={{
-                  paddingBottom: 10,
-                  borderBottomWidth: 2,
-                  borderBottomColor: active ? '#000DFF' : 'transparent',
-                }}
-              >
-                <Txt size={13.5} weight={active ? 700 : 500} color={active ? '#000DFF' : brand.text}>
-                  {t(TAB_LABEL[key])}
-                </Txt>
-              </Tap>
-            );
-          })}
-        </ScrollView>
-      </View>
+      <ShopNav
+        large
+        title={t('orders.title')}
+        below={
+          <>
+            <View style={{ paddingHorizontal: 16 }}>
+              <ShopSearch value={query} onChange={setQuery} placeholder={t('shop.searchOrders')} />
+            </View>
+            <View style={{ height: 16 }} />
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 20, gap: 22 }}
+            >
+              {ORDER_TABS.map((key) => {
+                const active = key === tab;
+                return (
+                  <Tap
+                    key={key}
+                    onPress={() => setTab(key)}
+                    accessibilityRole="tab"
+                    aria-selected={active}
+                    accessibilityLabel={t(TAB_LABEL[key])}
+                    feedback="opacity"
+                    style={{
+                      paddingBottom: 8,
+                      borderBottomWidth: 2,
+                      borderBottomColor: active ? '#000DFF' : 'transparent',
+                    }}
+                  >
+                    <Txt
+                      size={13.5}
+                      weight={active ? 700 : 500}
+                      color={active ? '#000DFF' : brand.text}
+                    >
+                      {t(TAB_LABEL[key])}
+                    </Txt>
+                  </Tap>
+                );
+              })}
+            </ScrollView>
+          </>
+        }
+      />
 
       <ScrollView
         contentContainerStyle={{ padding: 20, gap: 14, paddingBottom: 32 }}

@@ -2,7 +2,8 @@ import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 
-import { BrandBar, BrandField, BrandLink } from '@/components/brand/BrandKit';
+import { BrandField } from '@/components/brand/BrandKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { Txt } from '@/components/Txt';
 import { shop } from '@/data/shop';
 import { LineIcon } from '@/icons/line';
@@ -37,18 +38,11 @@ export default function BusinessProfileScreen() {
       style={{ flex: 1, backgroundColor: brand.canvas }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <BrandBar
+      <ShopNav
         title={t('shop.businessProfile')}
-        onBack={() => router.back()}
-        trailing={
-          <BrandLink
-            label={t('shop.save')}
-            size={15}
-            color={brand.linkAlt}
-            onPress={() => router.back()}
-            style={{ paddingRight: 8 }}
-          />
-        }
+        onBack
+        cta={t('shop.save')}
+        onCta={() => router.back()}
       />
 
       <ScrollView

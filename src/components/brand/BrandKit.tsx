@@ -1,11 +1,10 @@
-import { router } from 'expo-router';
 import React from 'react';
 import { TextInput, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Txt } from '@/components/Txt';
 import { Tap } from '@/components/ui';
-import { useI18n, useT } from '@/i18n';
+import { LineIcon, type LineIconName } from '@/icons/line';
+import { useI18n } from '@/i18n';
 import { familyFor } from '@/theme/fonts';
 import { brand, brandRadius, brandSize, brandType } from '@/theme/brand';
 
@@ -36,6 +35,7 @@ export function BrandButton({
   pill,
   style,
   raised,
+  icon,
 }: {
   label: string;
   onPress?: () => void;
@@ -48,6 +48,13 @@ export function BrandButton({
   style?: StyleProp<ViewStyle>;
   /** The floating CTA on the category picker. */
   raised?: boolean;
+  /**
+   * Drawn after the label. The category CTA carried its arrow as a `→` typed
+   * into the translated string, which put the one glyph that has to line up
+   * with the label's baseline outside the type system entirely — and gave the
+   * Sinhala and Tamil builds an arrow from a fallback font.
+   */
+  icon?: LineIconName;
 }) {
   const outline = variant === 'outline';
   const type = tall ? brandType.ctaTall : brandType.cta;
@@ -68,8 +75,10 @@ export function BrandButton({
               ? brandRadius.ctaTall
               : brandRadius.cta,
           backgroundColor: outline ? brand.surface : brand.primary,
+          flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
+          gap: 10,
           paddingVertical: 10,
           paddingHorizontal: 20,
           ...(outline ? { borderWidth: 1, borderColor: brand.borderStrong } : null),
@@ -94,6 +103,14 @@ export function BrandButton({
       >
         {label}
       </Txt>
+      {icon ? (
+        <LineIcon
+          name={icon}
+          size={Math.round(type.size * 0.95)}
+          color={outline ? brand.text : brand.onPrimary}
+          strokeWidth={2.2}
+        />
+      ) : null}
     </Tap>
   );
 }
@@ -155,78 +172,8 @@ export function BrandField({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Chrome
+// Links and spacing
 // ─────────────────────────────────────────────────────────────────────────────
-
-/** The auth app bar: a rounded back chip, a title, and optional trailing content. */
-export function BrandBar({
-  title,
-  onBack,
-  background = brand.canvas,
-  borderColor = brand.divider,
-  borderWidth = 1,
-  trailing,
-}: {
-  title: string;
-  onBack?: () => void;
-  background?: string;
-  borderColor?: string;
-  borderWidth?: number;
-  trailing?: React.ReactNode;
-}) {
-  const t = useT();
-  const insets = useSafeAreaInsets();
-
-  return (
-    <View
-      style={{
-        paddingTop: insets.top,
-        backgroundColor: background,
-        borderBottomWidth: borderWidth,
-        borderBottomColor: borderColor,
-      }}
-    >
-      <View
-        style={{
-          minHeight: brandSize.appBar,
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 12,
-          paddingHorizontal: 14,
-        }}
-      >
-        <Tap
-          onPress={onBack ?? (() => router.back())}
-          accessibilityRole="button"
-          accessibilityLabel={t('common.back')}
-          hitSlop={10}
-          style={{
-            width: brandSize.backChip.width,
-            height: brandSize.backChip.height,
-            borderRadius: brandRadius.backChip,
-            backgroundColor: brand.backChip,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Txt size={14} color={brand.backChipInk}>
-            ←
-          </Txt>
-        </Tap>
-        <Txt
-          flex={1}
-          size={brandType.barTitle.size}
-          weight={brandType.barTitle.weight}
-          color={brand.text}
-          numberOfLines={1}
-        >
-          {title}
-        </Txt>
-        {trailing}
-      </View>
-    </View>
-  );
-}
 
 /** A text link rendered inline inside a sentence. */
 export function BrandLink({

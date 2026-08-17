@@ -1,14 +1,12 @@
 import React from 'react';
 import { TextInput, View, type StyleProp, type ViewStyle } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Txt } from '@/components/Txt';
-import { Tap } from '@/components/ui';
 import { LineIcon, type LineIconName } from '@/icons/line';
 import { useI18n } from '@/i18n';
 import { useCountUp } from '@/theme/motion';
 import { familyFor } from '@/theme/fonts';
-import { brand, brandChip, brandRadius, brandType, type BrandChip } from '@/theme/brand';
+import { brand, brandChip, brandRadius, type BrandChip } from '@/theme/brand';
 
 /**
  * The pieces the nine application screens are assembled from.
@@ -114,65 +112,17 @@ export function ShopSearch({
   );
 }
 
-/** A large screen title, optionally with the "+ Add" pill beside it. */
-export function ShopHeader({
-  title,
-  action,
-  onAction,
-}: {
-  title: string;
-  action?: string;
-  onAction?: () => void;
-}) {
-  const insets = useSafeAreaInsets();
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 12,
-        paddingTop: insets.top + 14,
-        paddingHorizontal: 20,
-        paddingBottom: 16,
-      }}
-    >
-      <Txt flex={1} size={25} weight={700} tracking={-0.028} color={brand.text}>
-        {title}
-      </Txt>
-      {action ? (
-        <Tap
-          onPress={onAction}
-          accessibilityRole="button"
-          accessibilityLabel={action}
-          style={{
-            minHeight: 34,
-            borderRadius: brandRadius.pill,
-            backgroundColor: brand.addPill,
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingHorizontal: 22,
-          }}
-        >
-          <Txt size={14} weight={600} color={brand.addPillInk}>
-            {action}
-          </Txt>
-        </Tap>
-      ) : null}
-    </View>
-  );
-}
-
 /**
  * A stat tile: a label, a tinted icon square, and a figure.
  *
- * `align` flips between the two arrangements the design uses — Home puts the
- * icon top-right of the label, Analytics puts it top-left.
+ * `iconFirst` flips between the two arrangements the design uses — Home puts
+ * the icon top-right of the label, Analytics puts it top-left.
  */
 export function StatTile({
   label,
   value,
   delta,
+  deltaDirection,
   icon,
   iconTone = brand.iconTile,
   iconColor = brand.primary,
@@ -184,6 +134,13 @@ export function StatTile({
   label: string;
   value: string;
   delta?: string;
+  /**
+   * Draws the movement as an arrow beside the delta. The direction was an `↑`
+   * typed into the string, which meant it came from whatever font the platform
+   * fell back to for that codepoint — a different weight and size beside the
+   * drawn icons in the same tile.
+   */
+  deltaDirection?: 'up' | 'down';
   icon: LineIconName;
   iconTone?: string;
   iconColor?: string;
@@ -228,9 +185,23 @@ export function StatTile({
         {shown}
       </Txt>
       {delta ? (
-        <Txt size={13} weight={600} color="#37BC1D" style={{ marginTop: 6 }}>
-          {delta}
-        </Txt>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 6 }}>
+          {deltaDirection ? (
+            <LineIcon
+              name={deltaDirection === 'up' ? 'arrowUp' : 'arrowDown'}
+              size={13}
+              color={deltaDirection === 'up' ? '#37BC1D' : '#F20000'}
+              strokeWidth={2.4}
+            />
+          ) : null}
+          <Txt
+            size={13}
+            weight={600}
+            color={deltaDirection === 'down' ? '#F20000' : '#37BC1D'}
+          >
+            {delta}
+          </Txt>
+        </View>
       ) : null}
     </ShopCard>
   );

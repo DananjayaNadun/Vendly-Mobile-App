@@ -2,7 +2,8 @@ import { router } from 'expo-router';
 import React from 'react';
 import { View } from 'react-native';
 
-import { BrandBar, BrandButton } from '@/components/brand/BrandKit';
+import { BrandButton } from '@/components/brand/BrandKit';
+import { ShopNav } from '@/components/brand/ShopNav';
 import { Txt } from '@/components/Txt';
 import { LineIcon } from '@/icons/line';
 import { useT } from '@/i18n';
@@ -21,7 +22,7 @@ export function NotFound({ title, message }: { title: string; message: string })
 
   return (
     <View style={{ flex: 1, backgroundColor: brand.canvas }}>
-      <BrandBar title={title} onBack={() => router.back()} />
+      <ShopNav title={title} onBack />
 
       <View
         style={{
@@ -46,8 +47,10 @@ export function NotFound({ title, message }: { title: string; message: string })
         </Rise>
 
         <Rise index={1}>
+          {/* Not the bar's title — that already says which list you came from,
+              and repeating it here said the same word twice in a row. */}
           <Txt size={19} weight={600} align="center" color={brand.text}>
-            {title}
+            {t('notFound.title')}
           </Txt>
         </Rise>
         <Rise index={2}>

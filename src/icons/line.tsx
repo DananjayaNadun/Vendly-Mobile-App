@@ -4,11 +4,16 @@ import Svg, { Circle, Path, Polyline, Rect } from 'react-native-svg';
 /**
  * The line-icon set for the Vendly.lk design.
  *
- * The HTML prototype in the handoff uses emoji as placeholders (`🏠`, `📋`,
- * `👤`). The exported PDF — the finished artefact — draws stroke icons instead,
- * so these are redrawn to match it: a 24×24 grid, 1.8 stroke, round caps and
- * joins. Emoji survive only where the PDF genuinely shows one (the 👋 in
- * "Welcome back", the 🔐 on the reset card).
+ * The HTML prototype in the handoff uses emoji as placeholders. The exported
+ * PDF — the finished artefact — draws stroke icons instead, so these are
+ * redrawn to match it: a 24×24 grid, 1.8 stroke, round caps and joins.
+ *
+ * No emoji survive anywhere in the app. They were the last thing in it that
+ * rendered from the platform's font rather than from this file, which meant a
+ * greeting whose glyph was flat and multicoloured on one device, outlined and
+ * monochrome on another, and a different size on both — beside a set of icons
+ * drawn to a single weight. Anything that has to sit next to these strokes is
+ * drawn as one of them.
  *
  * Kept apart from `src/icons/index.tsx`, which is the existing app's set drawn
  * on a 20×20 grid to a different weight. Two icon languages for two design
@@ -181,6 +186,79 @@ const glyphs = {
     <>
       <Path d="M9.4 20.4H5.6a1.2 1.2 0 0 1-1.2-1.2V4.8a1.2 1.2 0 0 1 1.2-1.2h3.8" {...s(c, w)} />
       <Path d="M15.4 16.4 19.8 12l-4.4-4.4M19.8 12H9" {...s(c, w)} />
+    </>
+  ),
+  close: (c, w) => <Path d="M6.2 6.2 17.8 17.8M17.8 6.2 6.2 17.8" {...s(c, w)} />,
+  share: (c, w) => (
+    <>
+      <Path d="M12 15.4V3.8M8 7.4 12 3.4l4 4" {...s(c, w)} />
+      <Path d="M4.6 13.8v5.4a1.2 1.2 0 0 0 1.2 1.2h12.4a1.2 1.2 0 0 0 1.2-1.2v-5.4" {...s(c, w)} />
+    </>
+  ),
+  arrowUp: (c, w) => <Path d="M12 19.4V5.2M6 11.2 12 5.2l6 6" {...s(c, w)} />,
+  arrowRight: (c, w) => <Path d="M5 12h14M12.8 5.2 19.6 12l-6.8 6.8" {...s(c, w)} />,
+  arrowDown: (c, w) => <Path d="M12 4.6v14.2M6 12.8l6 6 6-6" {...s(c, w)} />,
+  lock: (c, w) => (
+    <>
+      <Rect x={4.4} y={10.2} width={15.2} height={10.4} rx={2.4} {...s(c, w)} />
+      <Path d="M8.2 10.2V7.6a3.8 3.8 0 0 1 7.6 0v2.6" {...s(c, w)} />
+      <Path d="M12 14.4v2" {...s(c, w)} />
+    </>
+  ),
+  /**
+   * The waving hand that greets the seller by name.
+   *
+   * Four fingers and a thumb rather than the outstretched palm an emoji draws:
+   * at 18pt a five-stroke palm turns into a grey smudge, and this reads as a
+   * hand at the size the greeting actually uses it.
+   */
+  hand: (c, w) => (
+    <>
+      <Path d="M9.4 12.4V5.6a1.4 1.4 0 0 1 2.8 0v5.6" {...s(c, w)} />
+      <Path d="M12.2 11.2V4.8a1.4 1.4 0 0 1 2.8 0v6.4" {...s(c, w)} />
+      <Path d="M15 11.4V6.6a1.4 1.4 0 0 1 2.8 0v7.6a7 7 0 0 1-7 7 6.4 6.4 0 0 1-5.4-2.9L3 14.4a1.5 1.5 0 0 1 2.4-1.8l1.6 2" {...s(c, w)} />
+      <Path d="M9.4 12.4V9.2a1.4 1.4 0 0 0-2.8 0v5.4" {...s(c, w)} />
+    </>
+  ),
+
+  // ── Business categories ───────────────────────────────────────────────────
+  shirt: (c, w) => (
+    <>
+      <Path d="M9 3.4 4.2 5.8 3 10.4l3 1.2v8.2a.8.8 0 0 0 .8.8h10.4a.8.8 0 0 0 .8-.8v-8.2l3-1.2-1.2-4.6L15 3.4" {...s(c, w)} />
+      <Path d="M9 3.4a3 3 0 0 0 6 0" {...s(c, w)} />
+    </>
+  ),
+  cup: (c, w) => (
+    <>
+      <Path d="M5.4 8.2h11.2l-1 11.4a1.2 1.2 0 0 1-1.2 1.1H7.6a1.2 1.2 0 0 1-1.2-1.1z" {...s(c, w)} />
+      <Path d="M16.4 11h1.8a2.4 2.4 0 0 1 0 4.8h-1.4" {...s(c, w)} />
+      <Path d="M8.4 5.4c0-1 1-1.4 1-2.4M12 5.4c0-1 1-1.4 1-2.4" {...s(c, w)} />
+    </>
+  ),
+  sparkle: (c, w) => (
+    <>
+      <Path d="M12 3.2 13.9 9l5.9 1.9-5.9 1.9L12 18.8l-1.9-5.9L4.2 11l5.9-1.9z" {...s(c, w)} />
+      <Path d="M18.6 16.4 19.3 18.5l2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7z" {...s(c, w)} />
+    </>
+  ),
+  mobile: (c, w) => (
+    <>
+      <Rect x={6.4} y={2.6} width={11.2} height={18.8} rx={2.6} {...s(c, w)} />
+      <Path d="M10.6 5.6h2.8M12 18.2v.1" {...s(c, w)} />
+    </>
+  ),
+  lamp: (c, w) => (
+    <>
+      <Path d="M6.6 10.6 12 3.4l5.4 7.2z" {...s(c, w)} />
+      <Path d="M12 10.6v7.2" {...s(c, w)} />
+      <Path d="M8.8 20.6h6.4a3.2 3.2 0 0 0-6.4 0z" {...s(c, w)} />
+    </>
+  ),
+  cart: (c, w) => (
+    <>
+      <Path d="M2.8 4.2h2.6l2.4 10.6h9.4l2-7.4H6.4" {...s(c, w)} />
+      <Circle cx={9} cy={19} r={1.6} {...s(c, w)} />
+      <Circle cx={16.6} cy={19} r={1.6} {...s(c, w)} />
     </>
   ),
 } satisfies Record<string, Draw>;

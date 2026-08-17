@@ -411,6 +411,8 @@ export const homeStats: {
   value: string;
   /** The delta is a key plus its numbers, so it translates like everything else. */
   delta: { key: TranslationKey; vars?: Record<string, string | number> };
+  /** Movement, when there is any. Drawn as an arrow rather than typed as one. */
+  direction?: 'up' | 'down';
   tab: 'all' | OrderStatus;
 }[] = [
   {
@@ -418,6 +420,7 @@ export const homeStats: {
     label: 'shop.newOrders',
     value: '24',
     delta: { key: 'shop.deltaToday', vars: { n: 3 } },
+    direction: 'up',
     tab: 'pending',
   },
   {
