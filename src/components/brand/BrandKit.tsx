@@ -127,6 +127,7 @@ export function BrandField({
   secure,
   keyboard,
   autoComplete,
+  error,
 }: {
   label: string;
   placeholder?: string;
@@ -135,6 +136,8 @@ export function BrandField({
   secure?: boolean;
   keyboard?: 'email-address' | 'phone-pad' | 'default';
   autoComplete?: 'email' | 'tel' | 'name' | 'off';
+  /** Shown under the field in red, and swaps the border to match. */
+  error?: string;
 }) {
   const { script } = useI18n();
 
@@ -152,14 +155,15 @@ export function BrandField({
         keyboardType={keyboard ?? 'default'}
         autoComplete={autoComplete}
         autoCapitalize={keyboard === 'email-address' ? 'none' : 'sentences'}
+        accessibilityLabel={label}
         style={{
           // Taller and more rounded than the HTML prototype's 49pt box, with a
           // hairline outline rather than a grey fill — as the PDF draws it.
           minHeight: brandSize.field,
           borderRadius: brandRadius.otp,
           backgroundColor: brand.field,
-          borderWidth: 1,
-          borderColor: brand.fieldBorder,
+          borderWidth: error ? 1.5 : 1,
+          borderColor: error ? '#F20000' : brand.fieldBorder,
           paddingHorizontal: 16,
           paddingVertical: 14,
           fontFamily: familyFor(script, 400, false),
@@ -167,6 +171,11 @@ export function BrandField({
           color: brand.text,
         }}
       />
+      {error ? (
+        <Txt size={12} weight={500} color="#F20000">
+          {error}
+        </Txt>
+      ) : null}
     </View>
   );
 }

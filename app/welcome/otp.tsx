@@ -1,16 +1,27 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BrandButton, Gap } from '@/components/brand/BrandKit';
 import { ShopNav } from '@/components/brand/ShopNav';
+import { Toast } from '@/components/Overlays';
+import { Tap } from '@/components/ui';
 import { Txt } from '@/components/Txt';
 import { LineIcon } from '@/icons/line';
 import { useI18n } from '@/i18n';
 import { familyFor } from '@/theme/fonts';
 import { brand, brandRadius, brandSize, brandType } from '@/theme/brand';
 import { Rise, usePop } from '@/theme/motion';
+
+const RESEND_SECONDS = 45;
+const EXPIRY_SECONDS = 9 * 60 + 15;
+
+function mmss(totalSeconds: number): string {
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
 
 /**
  * 05 · Verification — one screen, two jobs.
@@ -31,6 +42,33 @@ export default function OtpScreen() {
 
   const [digits, setDigits] = useState<string[]>(Array(LENGTH).fill(''));
   const boxes = useRef<(TextInput | null)[]>([]);
+
+  const [resendLeft, setResendLeft] = useState(RESEND_SECONDS);
+  const [expiryLeft, setExpiryLeft] = useState(EXPIRY_SECONDS);
+  const [resentToast, setResentToast] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setResendLeft((n) => (n > 0 ? n - 1 : 0));
+      setExpiryLeft((n) => (n > 0 ? n - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!resentToast) return;
+    const timer = setTimeout(() => setResentToast(false), 2400);
+    return () => clearTimeout(timer);
+  }, [resentToast]);
+
+  const resend = () => {
+    if (resendLeft > 0) return;
+    setResendLeft(RESEND_SECONDS);
+    setExpiryLeft(EXPIRY_SECONDS);
+    setDigits(Array(LENGTH).fill(''));
+    boxes.current[0]?.focus();
+    setResentToast(true);
+  };
 
   const setDigit = (index: number, raw: string) => {
     const value = raw.replace(/[^0-9]/g, '').slice(-1);
@@ -141,9 +179,17 @@ export default function OtpScreen() {
           <Txt size={12.5} align="center" color="#919191">
             {t('auth.notReceived')}
           </Txt>
-          <Txt size={12.5} weight={600} align="center" color={brand.resend}>
-            {t('auth.resendIn', { time: '0:45' })}
-          </Txt>
+          {resendLeft > 0 ? (
+            <Txt size={12.5} weight={600} align="center" color={brand.resend}>
+              {t('auth.resendIn', { time: mmss(resendLeft) })}
+            </Txt>
+          ) : (
+            <Tap onPress={resend} accessibilityRole="button" accessibilityLabel={t('auth.resend')}>
+              <Txt size={12.5} weight={700} align="center" color={brand.primary}>
+                {t('auth.resend')}
+              </Txt>
+            </Tap>
+          )}
         </Rise>
 
         <Rise
@@ -157,15 +203,25 @@ export default function OtpScreen() {
             paddingHorizontal: 24,
           }}
         >
-          <LineIcon name="lock" size={14} color="#707070" />
-          <Txt size={13} align="center" color="#707070">
-            {t('auth.expiresIn')}
-          </Txt>
-          <Txt size={13} weight={600} mono align="center" color={brand.text}>
-            9:15
-          </Txt>
+          {expiryLeft > 0 ? (
+            <>
+              <LineIcon name="lock" size={14} color="#707070" />
+              <Txt size={13} align="center" color="#707070">
+                {t('auth.expiresIn')}
+              </Txt>
+              <Txt size={13} weight={600} mono align="center" color={brand.text}>
+                {mmss(expiryLeft)}
+              </Txt>
+            </>
+          ) : (
+            <Txt size={13} weight={600} align="center" color="#F20000">
+              {t('auth.codeExpired')}
+            </Txt>
+          )}
         </Rise>
       </ScrollView>
+
+      <Toast visible={resentToast} title={t('auth.resent')} bottom={28} />
     </View>
   );
 }

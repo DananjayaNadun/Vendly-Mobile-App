@@ -44,6 +44,7 @@ export type OrderSource = 'WhatsApp' | 'Facebook' | 'Instagram';
 export type ShopOrder = {
   id: string;
   name: string;
+  phone: string;
   /** The product, as a name and a quantity — joined by `shop.itemQty`. */
   item: { product: string; qty: number };
   source: OrderSource;
@@ -81,6 +82,7 @@ export const orders: ShopOrder[] = [
   {
     id: '#432',
     name: 'Dinithi',
+    phone: '+94 77 111 2233',
     item: { product: 'Nike boots', qty: 1 },
     source: 'WhatsApp',
     time: '10:42 A.M.',
@@ -93,6 +95,7 @@ export const orders: ShopOrder[] = [
   {
     id: '#433',
     name: 'Venuja',
+    phone: '+94 77 222 3344',
     item: { product: 'Nike bottles', qty: 1 },
     source: 'Facebook',
     time: '10:42 A.M.',
@@ -105,6 +108,7 @@ export const orders: ShopOrder[] = [
   {
     id: '#434',
     name: 'Dananjaya',
+    phone: '+94 77 333 4455',
     item: { product: 'Nike bags', qty: 1 },
     source: 'Instagram',
     time: '10:42 A.M.',
@@ -117,6 +121,7 @@ export const orders: ShopOrder[] = [
   {
     id: '#435',
     name: 'Kamal',
+    phone: '+94 77 444 5566',
     item: { product: 'Nike caps', qty: 1 },
     source: 'WhatsApp',
     time: '10:42 A.M.',

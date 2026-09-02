@@ -1,9 +1,10 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 
 import { BrandField } from '@/components/brand/BrandKit';
 import { ShopNav } from '@/components/brand/ShopNav';
+import { Toast } from '@/components/Overlays';
 import { Txt } from '@/components/Txt';
 import { shop } from '@/data/shop';
 import { LineIcon } from '@/icons/line';
@@ -15,12 +16,14 @@ import { Rise } from '@/theme/motion';
  * 10 · Business profile.
  *
  * The logo tile, the shop's name and category, then six editable fields. Save
- * returns to Settings; nothing is persisted, as there is no backend.
+ * writes back into the shared `shop` record — there is no backend, but the
+ * edit should still stick for the rest of the session, and Settings (which
+ * reads the same record for the identity block) should reflect it.
  */
 
-const FIELDS: { key: string; label: TranslationKey; value: string }[] = [
-  { key: 'business', label: 'auth.businessName', value: shop.name },
-  { key: 'owner', label: 'shop.ownerName', value: 'Pahan Perera' },
+const FIELDS: { key: keyof typeof shop | 'owner'; label: TranslationKey; value: string }[] = [
+  { key: 'name', label: 'auth.businessName', value: shop.name },
+  { key: 'owner', label: 'shop.ownerName', value: shop.owner },
   { key: 'phone', label: 'auth.phone', value: shop.phone },
   { key: 'email', label: 'auth.email', value: shop.email },
   { key: 'address', label: 'shop.businessAddress', value: shop.address },
@@ -32,6 +35,20 @@ export default function BusinessProfileScreen() {
   const [values, setValues] = useState<Record<string, string>>(
     Object.fromEntries(FIELDS.map((f) => [f.key, f.value])),
   );
+  const [toast, setToast] = useState(false);
+
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => router.back(), 900);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
+  const save = () => {
+    for (const field of FIELDS) {
+      (shop as unknown as Record<string, string>)[field.key] = values[field.key].trim();
+    }
+    setToast(true);
+  };
 
   return (
     <KeyboardAvoidingView
@@ -42,7 +59,7 @@ export default function BusinessProfileScreen() {
         title={t('shop.businessProfile')}
         onBack
         cta={t('shop.save')}
-        onCta={() => router.back()}
+        onCta={save}
       />
 
       <ScrollView
@@ -93,6 +110,8 @@ export default function BusinessProfileScreen() {
           ))}
         </View>
       </ScrollView>
+
+      <Toast visible={toast} title={t('shop.profileSaved')} bottom={28} />
     </KeyboardAvoidingView>
   );
 }

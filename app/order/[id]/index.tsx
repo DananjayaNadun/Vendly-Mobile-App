@@ -62,14 +62,14 @@ export default function OrderDetailScreen() {
                 tint="#E0F7E0"
                 color="#0E8A2E"
                 label={t('order.call')}
-                onPress={() => callNumber('+94771234567')}
+                onPress={() => callNumber(order.phone)}
               />
               <ContactButton
                 icon="chat"
                 tint="#E0EEFC"
                 color={brand.primary}
                 label={t('order.whatsapp')}
-                onPress={() => openWhatsApp('+94771234567')}
+                onPress={() => openWhatsApp(order.phone)}
               />
             </View>
           </View>

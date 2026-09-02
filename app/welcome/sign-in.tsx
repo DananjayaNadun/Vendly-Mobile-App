@@ -20,18 +20,33 @@ import { Rise } from '@/theme/motion';
  * backend — so "Sign in" enters the app the way the prototype's own flow does.
  * No credential is stored, sent or validated anywhere.
  */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function SignInScreen() {
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [toast, setToast] = useState<string | null>(null);
+  const [touched, setTouched] = useState(false);
 
   useEffect(() => {
     if (!toast) return;
     const timer = setTimeout(() => setToast(null), 3400);
     return () => clearTimeout(timer);
   }, [toast]);
+
+  const emailError = touched && !EMAIL_RE.test(email.trim()) ? t('auth.emailInvalid') : undefined;
+  const passwordError = touched && !password ? t('auth.passwordRequired') : undefined;
+  const canSubmit = EMAIL_RE.test(email.trim()) && !!password;
+
+  const submit = () => {
+    if (!canSubmit) {
+      setTouched(true);
+      return;
+    }
+    router.replace('/home');
+  };
 
   return (
     <KeyboardAvoidingView
@@ -68,12 +83,14 @@ export default function SignInScreen() {
             onChange={setEmail}
             keyboard="email-address"
             autoComplete="email"
+            error={emailError}
           />
           <BrandField
             label={t('auth.password')}
             value={password}
             onChange={setPassword}
             secure
+            error={passwordError}
           />
           <View style={{ alignItems: 'flex-end' }}>
             <BrandLink
@@ -87,7 +104,7 @@ export default function SignInScreen() {
         </Rise>
 
         <Rise index={2} style={{ paddingTop: 24, paddingHorizontal: brandSize.gutter }}>
-          <BrandButton pill tall label={t('auth.signIn')} onPress={() => router.replace('/home')} />
+          <BrandButton pill tall label={t('auth.signIn')} onPress={submit} />
         </Rise>
 
         <Rise

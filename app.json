@@ -10,9 +10,13 @@
     "newArchEnabled": true,
     "plugins": ["expo-router", "expo-font"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "lk.vendly.app",
+      "buildNumber": "1"
     },
     "android": {
+      "package": "lk.vendly.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
